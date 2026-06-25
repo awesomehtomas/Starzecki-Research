@@ -9,7 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "new-report": "node scripts/new-report.mjs"
+    "new-report": "node scripts/new-report.mjs",
+    "social": "node scripts/social-post.mjs"
   },
   "private": true,
   "dependencies": {

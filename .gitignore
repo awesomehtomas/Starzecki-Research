@@ -10,6 +10,9 @@ dist/
 .env.production
 .env.*.local
 
+# generated social-post drafts (local working files)
+social/
+
 # editor / OS noise
 .DS_Store
 Thumbs.db

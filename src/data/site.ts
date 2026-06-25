@@ -13,6 +13,10 @@ export const site = {
 
   linkedin: 'https://www.linkedin.com/in/thomas-starzecki-794751270',
 
+  // Once you create your X/Twitter account, paste its URL here (e.g.
+  // 'https://x.com/yourhandle') and it appears in the footer automatically.
+  twitterUrl: '',
+
   // Optional: paste your public Google Sheet portfolio tracker link here to
   // light up the "View the full live tracker" button on /portfolio.
   portfolioSheetUrl: '',
