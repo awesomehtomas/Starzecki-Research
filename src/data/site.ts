@@ -7,7 +7,7 @@ export const site = {
   shortName: 'Starzecki Research',
   tagline: 'Independent paper equity research.',
   description:
-    'Independent, educational equity research with a transparent paper long/short portfolio. Every call is timestamped at publication and benchmarked against the S&P 500. This is not investment advice.',
+    'In-depth long/short equity research, in the open. Every call is timestamped, benchmarked against the S&P 500, and on the record — win or lose. Not investment advice.',
   author: 'Thomas Starzecki',
   email: 'thomasstarzeckihof@gmail.com',
 
