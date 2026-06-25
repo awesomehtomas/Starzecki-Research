@@ -1,58 +1,10 @@
 {
-  "inceptionDate": "2026-01-15",
+  "inceptionDate": "2026-06-25",
   "startingCapital": 100000000,
   "currency": "USD",
-  "note": "Hypothetical $100MM paper book. Price-only, marked to market. No real capital. Replace this file with your own positions and NAV history as your track record builds.",
-  "positions": [
-    {
-      "ticker": "VITL",
-      "company": "Vital Farms",
-      "sector": "Consumer Staples",
-      "direction": "Long",
-      "entryDate": "2026-01-20",
-      "entryPrice": 38.5,
-      "currentPrice": 44.2,
-      "weight": 0.06,
-      "status": "Open",
-      "reportSlug": "vital-farms-vitl"
-    },
-    {
-      "ticker": "W",
-      "company": "Wayfair",
-      "sector": "Consumer Discretionary",
-      "direction": "Short",
-      "entryDate": "2026-02-03",
-      "entryPrice": 62.1,
-      "currentPrice": 55.4,
-      "weight": 0.05,
-      "status": "Open",
-      "reportSlug": "wayfair-w"
-    },
-    {
-      "ticker": "STNE",
-      "company": "StoneCo",
-      "sector": "Financials",
-      "direction": "Long",
-      "entryDate": "2026-03-10",
-      "entryPrice": 13.2,
-      "currentPrice": 11.6,
-      "weight": 0.04,
-      "status": "Open",
-      "reportSlug": "stoneco-stne"
-    }
-  ],
+  "note": "Hypothetical $100MM paper book. Price-only, marked to market. No real capital. Add positions and NAV-history points here as your track record builds — see PUBLISHING.md.",
+  "positions": [],
   "navHistory": [
-    { "date": "2026-01-15", "nav": 100.0, "spx": 100.0 },
-    { "date": "2026-02-01", "nav": 100.9, "spx": 100.4 },
-    { "date": "2026-02-15", "nav": 101.6, "spx": 101.0 },
-    { "date": "2026-03-01", "nav": 100.8, "spx": 101.7 },
-    { "date": "2026-03-15", "nav": 102.1, "spx": 100.9 },
-    { "date": "2026-04-01", "nav": 102.9, "spx": 101.5 },
-    { "date": "2026-04-15", "nav": 103.4, "spx": 102.0 },
-    { "date": "2026-05-01", "nav": 103.1, "spx": 102.4 },
-    { "date": "2026-05-15", "nav": 104.0, "spx": 102.7 },
-    { "date": "2026-06-01", "nav": 104.6, "spx": 103.0 },
-    { "date": "2026-06-15", "nav": 104.9, "spx": 103.2 },
-    { "date": "2026-06-25", "nav": 105.3, "spx": 103.4 }
+    { "date": "2026-06-25", "nav": 100.0, "spx": 100.0 }
   ]
 }

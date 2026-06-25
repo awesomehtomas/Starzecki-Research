@@ -1,10 +1,13 @@
 // Small formatting helpers shared across pages.
 
 export function formatDate(d: Date): string {
+  // Format in UTC so a date entered as "2026-06-25" never displays as the 24th
+  // in timezones behind UTC. Publication dates are part of the track record.
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    timeZone: 'UTC',
   }).format(d);
 }
 

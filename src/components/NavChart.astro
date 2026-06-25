@@ -11,32 +11,56 @@ interface Props {
 }
 const { history } = Astro.props;
 
+// Need at least two points to draw a line.
+const enough = history.length >= 2;
+
 const W = 720;
 const H = 300;
 const pad = { top: 24, right: 18, bottom: 34, left: 40 };
 const innerW = W - pad.left - pad.right;
 const innerH = H - pad.top - pad.bottom;
 
-const values = history.flatMap((d) => [d.nav, d.spx]);
-let min = Math.min(...values);
-let max = Math.max(...values);
-const range = max - min || 1;
-min = min - range * 0.18;
-max = max + range * 0.18;
+let navPts = '';
+let spxPts = '';
+let navArea = '';
+let baseY = 0;
+let lastX = 0;
+let lastNavY = 0;
+let last = history[history.length - 1];
 
-const x = (i: number) => pad.left + (innerW * i) / (history.length - 1);
-const y = (v: number) => pad.top + innerH * (1 - (v - min) / (max - min));
+if (enough) {
+  const values = history.flatMap((d) => [d.nav, d.spx]);
+  let min = Math.min(...values);
+  let max = Math.max(...values);
+  const range = max - min || 1;
+  min = min - range * 0.18;
+  max = max + range * 0.18;
 
-const navPts = history.map((d, i) => `${x(i).toFixed(1)},${y(d.nav).toFixed(1)}`).join(' ');
-const spxPts = history.map((d, i) => `${x(i).toFixed(1)},${y(d.spx).toFixed(1)}`).join(' ');
-const navArea = `${pad.left},${(pad.top + innerH).toFixed(1)} ${navPts} ${(pad.left + innerW).toFixed(1)},${(pad.top + innerH).toFixed(1)}`;
+  const x = (i: number) => pad.left + (innerW * i) / (history.length - 1);
+  const y = (v: number) => pad.top + innerH * (1 - (v - min) / (max - min));
 
-const baseY = y(100);
-const last = history[history.length - 1];
-const lastX = x(history.length - 1);
+  navPts = history.map((d, i) => `${x(i).toFixed(1)},${y(d.nav).toFixed(1)}`).join(' ');
+  spxPts = history.map((d, i) => `${x(i).toFixed(1)},${y(d.spx).toFixed(1)}`).join(' ');
+  navArea = `${pad.left},${(pad.top + innerH).toFixed(1)} ${navPts} ${(pad.left + innerW).toFixed(1)},${(pad.top + innerH).toFixed(1)}`;
+  baseY = y(100);
+  lastX = x(history.length - 1);
+  lastNavY = y(last.nav);
+}
 ---
 
-<figure class="w-full">
+{
+  !enough && (
+    <div class="flex h-48 flex-col items-center justify-center rounded-md border border-dashed border-line bg-paper-deep text-center">
+      <p class="text-sm font-medium text-ink">Your NAV vs S&amp;P chart appears here</p>
+      <p class="mt-1 max-w-xs text-xs text-muted">
+        Add a second point to <code>navHistory</code> in <code>src/data/portfolio.json</code> as your
+        track record builds.
+      </p>
+    </div>
+  )
+}
+
+<figure class:list={['w-full', !enough && 'hidden']}>
   <svg
     viewBox={`0 0 ${W} ${H}`}
     class="h-auto w-full"
@@ -60,7 +84,7 @@ const lastX = x(history.length - 1);
     <!-- Paper NAV -->
     <polygon points={navArea} class="fill-accent/10"></polygon>
     <polyline points={navPts} class="fill-none stroke-accent" stroke-width="2.5" stroke-linejoin="round"></polyline>
-    <circle cx={lastX} cy={y(last.nav)} r="3.5" class="fill-accent"></circle>
+    <circle cx={lastX} cy={lastNavY} r="3.5" class="fill-accent"></circle>
 
     <!-- x-axis end labels -->
     <text x={pad.left} y={H - 12} text-anchor="start" class="fill-muted" font-size="10">

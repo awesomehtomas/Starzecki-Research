@@ -95,6 +95,16 @@ const stats = [
           </thead>
           <tbody>
             {
+              pf.positions.length === 0 && (
+                <tr class="border-t border-line">
+                  <td colspan="9" class="px-4 py-10 text-center text-muted">
+                    No positions yet. Add your first one in <code>src/data/portfolio.json</code> once
+                    you publish a report.
+                  </td>
+                </tr>
+              )
+            }
+            {
               pf.positions.map((p) => (
                 <tr class="border-t border-line">
                   <td class="px-4 py-3">
