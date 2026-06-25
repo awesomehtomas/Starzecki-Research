@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+
+// Timeline — edit freely. [verify] marks anything you should confirm or refine.
+const timeline = [
+  {
+    when: 'Undergraduate',
+    what: 'B.B.A., Hofstra University',
+    detail:
+      'Built the foundation in accounting, corporate finance, and capital markets — and discovered that the part I cared about was forming a view and defending it.',
+  },
+  {
+    when: 'Graduate',
+    what: 'M.S. in Finance — Investment Analysis concentration, Hofstra University',
+    detail:
+      'Focused coursework in valuation, financial statement analysis, and portfolio theory, geared toward buy- and sell-side analysis.',
+  },
+  {
+    when: 'In progress',
+    what: 'CFA Level I candidate',
+    detail:
+      'Working through the curriculum to sharpen the ethics, quantitative, and valuation toolkit that underpins serious research.',
+  },
+  {
+    when: 'Hands-on',
+    what: 'Hardline Capital — student-managed fund',
+    detail:
+      'A member of Hofstra’s student-managed investment fund, pitching and defending ideas to peers and faculty with real accountability for the reasoning.',
+  },
+  {
+    when: 'Ongoing',
+    what: 'Financial modeling',
+    detail:
+      'Three-statement models, DCFs, comparable-company and precedent analysis, and LBOs — built from primary filings, not templates.',
+  },
+  {
+    when: 'Now',
+    what: 'Launching Starzecki Research',
+    detail:
+      'An independent, public research project to show the work: timestamped theses, a transparent paper portfolio, and a track record I do not get to revise.',
+  },
+];
+---
+
+<BaseLayout
+  title="About"
+  description="Thomas Starzecki — finance graduate, CFA Level I candidate, and the analyst behind Starzecki Research. My path in finance and how I approach equity research."
+>
+  <section class="mx-auto max-w-3xl px-5 py-14">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent">My finance journey</p>
+    <h1 class="mt-3 font-serif text-3xl text-ink md:text-4xl">About</h1>
+
+    <div class="mt-8 space-y-5 text-lg leading-relaxed text-ink-soft">
+      <p>
+        I’m {site.author}, a recent finance graduate and CFA Level I candidate. I started Starzecki
+        Research to do one thing well in public: pick a company, build a genuine point of view, and
+        put it on the record where it can be checked.
+      </p>
+      <p>
+        Most early-career research lives in a folder no one ever opens. I’d rather publish — clearly,
+        honestly, and on a cadence — so the quality of my thinking is visible over time rather than
+        described on a résumé. Every report is timestamped at publication, every position is
+        benchmarked against the S&amp;P 500, and the calls that don’t work stay up.
+      </p>
+    </div>
+
+    <!-- Timeline -->
+    <h2 class="mt-14 font-serif text-2xl text-ink">The journey so far</h2>
+    <ol class="mt-6 space-y-6 border-l border-line pl-6">
+      {
+        timeline.map((t) => (
+          <li class="relative">
+            <span class="absolute -left-[1.6rem] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-accent bg-paper" aria-hidden="true" />
+            <p class="text-xs font-semibold uppercase tracking-wider text-accent">{t.when}</p>
+            <p class="mt-1 font-serif text-lg text-ink">{t.what}</p>
+            <p class="mt-1 leading-relaxed text-muted">{t.detail}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <!-- Process -->
+    <h2 class="mt-14 font-serif text-2xl text-ink">My process &amp; philosophy</h2>
+    <div class="mt-5 space-y-4 leading-relaxed text-ink-soft">
+      <p>
+        I look for a <strong class="text-ink">variant view</strong> — a place where my read of the
+        business differs, with reasons, from what the price implies. I gravitate toward under-covered
+        small- and mid-caps where doing the work still moves the needle, and I want a
+        <strong class="text-ink"> catalyst</strong>: a reason the gap closes inside a definable
+        horizon.
+      </p>
+      <p>
+        Valuation is a reconciliation, not a single number. I anchor on a DCF built from defensible
+        operating assumptions, cross-check it against comparable companies and precedent
+        transactions, and pay attention to where those methods disagree. Then I pressure-test the
+        thesis: I write down what would prove me wrong before I need it.
+      </p>
+      <p>
+        I’d rather be judged on the <strong class="text-ink">reasoning</strong> than on any single
+        outcome. Good process produces bad outcomes sometimes; the record here is designed to make
+        both visible.
+      </p>
+    </div>
+
+    <!-- Looking for -->
+    <h2 class="mt-14 font-serif text-2xl text-ink">What I’m looking for</h2>
+    <p class="mt-5 leading-relaxed text-ink-soft">
+      I’m early in my career and pointed squarely at <strong class="text-ink">equity research,
+      investment management, and investment banking</strong>. If you’re hiring for an analyst seat
+      and want to see how someone actually thinks about businesses and valuation, this site is the
+      audition.
+    </p>
+
+    <!-- Contact -->
+    <div class="mt-14 rounded-lg border border-line bg-card p-6">
+      <h2 class="font-serif text-xl text-ink">Get in touch</h2>
+      <p class="mt-2 text-muted">I’d welcome a conversation — feedback, ideas, or opportunities.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a
+          href={site.linkedin}
+          target="_blank"
+          rel="me noopener"
+          class="inline-flex items-center gap-2 rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper hover:bg-ink-soft"
+        >
+          Connect on LinkedIn →
+        </a>
+        <a
+          href={`mailto:${site.email}`}
+          class="inline-flex items-center gap-2 rounded-md border border-line bg-card px-5 py-2.5 text-sm font-semibold text-ink hover:border-accent/60"
+        >
+          {site.email}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

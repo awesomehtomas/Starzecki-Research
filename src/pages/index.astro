@@ -1,0 +1,145 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ReportCard from '../components/ReportCard.astro';
+import NavChart from '../components/NavChart.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import { getPortfolio } from '../lib/portfolio';
+import { site } from '../data/site';
+import { pct, formatDate } from '../lib/format';
+
+const reports = (await getCollection('reports')).sort(
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
+);
+const latest = reports.slice(0, 3);
+const pf = getPortfolio();
+---
+
+<BaseLayout title={site.name} description={site.description}>
+  <!-- Hero -->
+  <section class="border-b border-line">
+    <div class="mx-auto max-w-6xl px-5 py-20 md:py-28">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+        Independent equity research
+      </p>
+      <h1 class="mt-4 max-w-3xl font-serif text-4xl leading-[1.1] text-ink md:text-6xl">
+        Reasoning, in the open.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
+        Starzecki Research publishes deep long/short equity work on under-covered small- and
+        mid-caps. Every call is timestamped at publication, benchmarked against the S&amp;P 500, and
+        left on the record — whether it works or not.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a
+          href="/research"
+          class="inline-flex items-center gap-2 rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft"
+        >
+          Read the research →
+        </a>
+        <a
+          href="/portfolio"
+          class="inline-flex items-center gap-2 rounded-md border border-line bg-card px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-accent/60"
+        >
+          See the paper portfolio
+        </a>
+      </div>
+
+      <!-- Stat strip -->
+      <dl class="mt-12 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
+        <div class="bg-card px-5 py-4">
+          <dt class="text-xs uppercase tracking-wider text-muted">Reports published</dt>
+          <dd class="mt-1 font-serif text-2xl text-ink">{reports.length}</dd>
+        </div>
+        <div class="bg-card px-5 py-4">
+          <dt class="text-xs uppercase tracking-wider text-muted">Paper NAV</dt>
+          <dd class="mt-1 font-serif text-2xl text-ink">{pct(pf.navReturn)}</dd>
+        </div>
+        <div class="bg-card px-5 py-4">
+          <dt class="text-xs uppercase tracking-wider text-muted">vs S&amp;P 500</dt>
+          <dd
+            class:list={[
+              'mt-1 font-serif text-2xl',
+              pf.excess >= 0 ? 'text-long' : 'text-short',
+            ]}
+          >
+            {pct(pf.excess)}
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Latest reports -->
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <div class="flex items-end justify-between">
+      <div>
+        <h2 class="font-serif text-2xl text-ink">Latest research</h2>
+        <p class="mt-1 text-sm text-muted">Roughly one deep report every two weeks.</p>
+      </div>
+      <a href="/research" class="text-sm font-semibold text-accent hover:underline">All reports →</a>
+    </div>
+
+    {
+      latest.length > 0 ? (
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {latest.map((report) => (
+            <ReportCard report={report} />
+          ))}
+        </div>
+      ) : (
+        <p class="mt-8 rounded-lg border border-dashed border-line bg-card px-5 py-10 text-center text-muted">
+          No reports yet. Your first published report will appear here automatically.
+        </p>
+      )
+    }
+  </section>
+
+  <!-- Portfolio snapshot -->
+  <section class="border-y border-line bg-paper-deep">
+    <div class="mx-auto max-w-6xl px-5 py-16">
+      <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
+        <div>
+          <h2 class="font-serif text-2xl text-ink">The paper portfolio</h2>
+          <p class="mt-3 max-w-md leading-relaxed text-ink-soft">
+            A hypothetical $100MM long/short book, marked to market and benchmarked against the
+            S&amp;P 500 since inception on {formatDate(new Date(pf.inceptionDate))}. Price-only, no
+            real capital — the point is to judge the reasoning over time.
+          </p>
+          <dl class="mt-6 grid grid-cols-3 gap-4">
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-muted">Paper NAV</dt>
+              <dd class="mt-1 font-serif text-xl text-ink">{pct(pf.navReturn)}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-muted">S&amp;P 500</dt>
+              <dd class="mt-1 font-serif text-xl text-ink">{pct(pf.spxReturn)}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-muted">Excess</dt>
+              <dd
+                class:list={['mt-1 font-serif text-xl', pf.excess >= 0 ? 'text-long' : 'text-short']}
+              >
+                {pct(pf.excess)}
+              </dd>
+            </div>
+          </dl>
+          <a
+            href="/portfolio"
+            class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline"
+          >
+            Full portfolio &amp; positions →
+          </a>
+        </div>
+        <div class="rounded-lg border border-line bg-card p-5">
+          <NavChart history={pf.history} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimer -->
+  <section class="mx-auto max-w-6xl px-5 py-12">
+    <Disclaimer variant="banner" />
+  </section>
+</BaseLayout>

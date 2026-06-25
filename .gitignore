@@ -1,0 +1,17 @@
+# dependencies (anyone can re-download these — never upload them)
+node_modules/
+
+# build output (generated automatically by `npm run build`)
+dist/
+.astro/
+
+# environment / secrets
+.env
+.env.production
+.env.*.local
+
+# editor / OS noise
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*

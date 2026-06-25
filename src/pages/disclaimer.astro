@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="Disclaimer"
+  description="Starzecki Research is an independent, educational project. Nothing on this site is investment advice."
+>
+  <section class="mx-auto max-w-3xl px-5 py-14">
+    <h1 class="font-serif text-3xl text-ink md:text-4xl">Disclaimer</h1>
+
+    <div class="rich-text mt-6 text-ink-soft">
+      <p>
+        <strong>Not investment advice.</strong> Starzecki Research is an independent, personal, and
+        educational project. The content on this site is provided for informational and educational
+        purposes only. It is not, and should not be construed as, investment advice, a research
+        report prepared for any client, a solicitation, or an offer or recommendation to buy, sell,
+        or hold any security or to pursue any investment strategy.
+      </p>
+
+      <p>
+        <strong>No adviser relationship.</strong> {site.author} is not a registered investment
+        adviser, broker-dealer, or financial planner, and nothing here creates an advisory or
+        fiduciary relationship of any kind. Reading this site does not make you a client.
+      </p>
+
+      <p>
+        <strong>Hypothetical, paper portfolio.</strong> The portfolio shown on this site is
+        hypothetical. It reflects no real capital, no real trades, and no real account. Hypothetical
+        and model performance has many inherent limitations: it benefits from hindsight, does not
+        involve real execution, financing, borrow, slippage, taxes, or fees, and is not indicative of
+        any actual results. Returns are price-only and indexed for illustration.
+      </p>
+
+      <p>
+        <strong>No guarantee of accuracy.</strong> Information is drawn from sources believed to be
+        reliable, but its accuracy and completeness are not guaranteed. Prices, figures, and
+        estimates may be delayed, approximate, or wrong, and may not be updated. Forward-looking
+        statements and price targets are opinions, not promises, and are subject to change without
+        notice.
+      </p>
+
+      <p>
+        <strong>Your decisions are your own.</strong> Investing involves risk, including the possible
+        loss of principal. Past performance — real or hypothetical — does not guarantee future
+        results. You are solely responsible for your own investment decisions and should do your own
+        research and consult a licensed professional who knows your circumstances before acting on
+        anything you read here.
+      </p>
+
+      <p>
+        <strong>Positions &amp; conflicts.</strong> The author may or may not hold positions in
+        securities discussed and is under no obligation to disclose or update any such holdings. Any
+        opinions are the author’s own and do not represent the views of any employer, school, fund,
+        or other organization.
+      </p>
+
+      <p>
+        <strong>No liability.</strong> To the fullest extent permitted by law, the author accepts no
+        liability for any loss or damage arising from reliance on any information on this site.
+      </p>
+
+      <p class="text-sm text-muted">
+        By using this site you acknowledge and agree to the above. Questions?{' '}
+        <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

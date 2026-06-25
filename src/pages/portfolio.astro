@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NavChart from '../components/NavChart.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import { getPortfolio } from '../lib/portfolio';
+import { site } from '../data/site';
+import { formatDate, formatPrice, formatPriceWhole, pct } from '../lib/format';
+
+const pf = getPortfolio();
+
+const stats = [
+  { label: 'Paper NAV', value: formatPriceWhole(pf.navDollars), sub: pct(pf.navReturn) + ' since inception' },
+  { label: 'Total return', value: pct(pf.navReturn), sub: 'price-only, marked to market' },
+  { label: 'S&P 500', value: pct(pf.spxReturn), sub: 'same window' },
+  {
+    label: 'Excess vs S&P (alpha)',
+    value: pct(pf.excess),
+    sub: pf.excess >= 0 ? 'ahead of benchmark' : 'behind benchmark',
+    color: pf.excess >= 0 ? 'text-long' : 'text-short',
+  },
+];
+---
+
+<BaseLayout
+  title="Portfolio"
+  description="The Starzecki Research paper portfolio — a hypothetical $100MM long/short book, marked to market and benchmarked against the S&P 500."
+>
+  <section class="mx-auto max-w-6xl px-5 py-14">
+    <header class="max-w-2xl">
+      <h1 class="font-serif text-3xl text-ink md:text-4xl">Paper portfolio</h1>
+      <p class="mt-3 leading-relaxed text-muted">
+        A hypothetical <strong class="text-ink">$100MM</strong> long/short book, marked to market and
+        price-only. Inception {formatDate(new Date(pf.inceptionDate))}; figures as of {formatDate(new Date(pf.asOf))}.
+        Benchmarked against the S&amp;P 500. No real capital is at risk — the point is an honest,
+        timestamped record of the reasoning.
+      </p>
+    </header>
+
+    <!-- Headline stats -->
+    <dl class="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line lg:grid-cols-4">
+      {
+        stats.map((s) => (
+          <div class="bg-card px-5 py-5">
+            <dt class="text-xs uppercase tracking-wider text-muted">{s.label}</dt>
+            <dd class:list={['mt-1 font-serif text-2xl text-ink', s.color]}>{s.value}</dd>
+            <dd class="mt-0.5 text-xs text-muted">{s.sub}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <!-- Chart -->
+    <div class="mt-8 rounded-lg border border-line bg-card p-6">
+      <h2 class="font-serif text-xl text-ink">NAV vs S&amp;P 500</h2>
+      <p class="mt-1 text-sm text-muted">Both indexed to 100 at inception.</p>
+      <div class="mt-5">
+        <NavChart history={pf.history} />
+      </div>
+    </div>
+
+    <!-- Positions -->
+    <div class="mt-10">
+      <div class="flex items-center justify-between">
+        <h2 class="font-serif text-2xl text-ink">Positions</h2>
+        {
+          site.portfolioSheetUrl ? (
+            <a
+              href={site.portfolioSheetUrl}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-md border border-line bg-card px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-accent/60"
+            >
+              View the full live tracker (Google Sheets) →
+            </a>
+          ) : (
+            <span class="text-xs text-muted">Live tracker link coming soon</span>
+          )
+        }
+      </div>
+
+      <div class="mt-5 overflow-x-auto rounded-lg border border-line">
+        <table class="w-full min-w-[760px] border-collapse text-sm">
+          <thead>
+            <tr class="bg-paper-deep text-left text-xs uppercase tracking-wider text-muted">
+              <th class="px-4 py-3 font-semibold">Position</th>
+              <th class="px-4 py-3 font-semibold">Dir.</th>
+              <th class="px-4 py-3 font-semibold">Sector</th>
+              <th class="px-4 py-3 font-semibold">Entry</th>
+              <th class="px-4 py-3 text-right font-semibold">Entry px</th>
+              <th class="px-4 py-3 text-right font-semibold">Current</th>
+              <th class="px-4 py-3 text-right font-semibold">Return</th>
+              <th class="px-4 py-3 text-right font-semibold">Weight</th>
+              <th class="px-4 py-3 font-semibold">Report</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              pf.positions.map((p) => (
+                <tr class="border-t border-line">
+                  <td class="px-4 py-3">
+                    <span class="font-semibold text-ink">{p.ticker}</span>
+                    <span class="block text-xs text-muted">{p.company}</span>
+                  </td>
+                  <td class:list={['px-4 py-3 font-medium', p.direction === 'Long' ? 'text-long' : 'text-short']}>
+                    {p.direction}
+                  </td>
+                  <td class="px-4 py-3 text-muted">{p.sector}</td>
+                  <td class="px-4 py-3 text-muted">{formatDate(new Date(p.entryDate))}</td>
+                  <td class="px-4 py-3 text-right tabular-nums">{formatPrice(p.entryPrice)}</td>
+                  <td class="px-4 py-3 text-right tabular-nums">{formatPrice(p.currentPrice)}</td>
+                  <td class:list={['px-4 py-3 text-right font-semibold tabular-nums', p.returnPct >= 0 ? 'text-long' : 'text-short']}>
+                    {pct(p.returnPct)}
+                  </td>
+                  <td class="px-4 py-3 text-right tabular-nums text-muted">{(p.weight * 100).toFixed(1)}%</td>
+                  <td class="px-4 py-3">
+                    {p.reportSlug ? (
+                      <a href={`/research/${p.reportSlug}`} class="font-medium text-accent hover:underline">
+                        View →
+                      </a>
+                    ) : (
+                      <span class="text-muted">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs text-muted">
+        Closed and losing positions stay on the record — nothing is deleted. Weights are share of the
+        $100MM paper book.
+      </p>
+    </div>
+
+    <div class="mt-12">
+      <Disclaimer variant="banner" />
+    </div>
+  </section>
+</BaseLayout>

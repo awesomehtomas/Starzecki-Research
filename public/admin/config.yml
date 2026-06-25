@@ -1,0 +1,50 @@
+# Decap CMS configuration (OPTIONAL form-based publisher at /admin).
+#
+# IMPORTANT — before this works you must:
+#   1. Change `repo:` below to "your-github-username/your-repo-name".
+#   2. Wire up GitHub login (an OAuth step). See PUBLISHING.md → "Optional: /admin".
+# Until then, use the simpler no-CMS flow (edit files on github.com) — it works today.
+
+backend:
+  name: github
+  repo: your-github-username/starzecki-research # <-- CHANGE THIS
+  branch: main
+
+# Uploaded report PDFs are stored here and referenced from this public path.
+media_folder: "public/reports"
+public_folder: "/reports"
+
+collections:
+  - name: "reports"
+    label: "Reports"
+    label_singular: "Report"
+    folder: "src/content/reports"
+    create: true
+    slug: "{{fields.company}}-{{fields.ticker}}"
+    extension: "md"
+    format: "frontmatter"
+    summary: "{{fields.ticker}} · {{fields.rating}} · {{fields.publishDate}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string", hint: "e.g. Vital Farms (VITL) — Starter Long" }
+      - { label: "Ticker", name: "ticker", widget: "string" }
+      - { label: "Company", name: "company", widget: "string" }
+      - { label: "Sector", name: "sector", widget: "string", hint: "Used for the filter on /research" }
+      - {
+          label: "Publish date",
+          name: "publishDate",
+          widget: "datetime",
+          date_format: "YYYY-MM-DD",
+          time_format: false,
+          format: "YYYY-MM-DD",
+        }
+      - { label: "Rating", name: "rating", widget: "select", options: ["Long", "Short", "Hold"] }
+      - { label: "Conviction", name: "conviction", widget: "select", options: ["Low", "Medium", "High"] }
+      - { label: "Price at publication", name: "priceAtPublication", widget: "number", value_type: "float" }
+      - { label: "Price target", name: "priceTarget", widget: "number", value_type: "float" }
+      - { label: "Horizon", name: "horizon", widget: "string", default: "12–18 months" }
+      - { label: "Status", name: "status", widget: "select", options: ["Open", "Closed"], default: "Open" }
+      - { label: "Summary (shown on cards)", name: "summary", widget: "text" }
+      - { label: "Report PDF", name: "pdf", widget: "file", hint: "Upload the exported report PDF" }
+      - { label: "Model URL (Google Sheets)", name: "modelUrl", widget: "string", required: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Body (optional notes)", name: "body", widget: "markdown", required: false }

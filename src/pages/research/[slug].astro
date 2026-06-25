@@ -1,0 +1,185 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RatingBadge from '../../components/RatingBadge.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+import { formatDate, formatPrice, impliedMove, pct } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const reports = (await getCollection('reports')).sort(
+    (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
+  );
+  return reports.map((report, i) => ({
+    params: { slug: report.id },
+    props: {
+      report,
+      newer: reports[i - 1] ?? null, // toward the top of the list (more recent)
+      older: reports[i + 1] ?? null,
+    },
+  }));
+}
+
+interface Props {
+  report: CollectionEntry<'reports'>;
+  newer: CollectionEntry<'reports'> | null;
+  older: CollectionEntry<'reports'> | null;
+}
+
+const { report, newer, older } = Astro.props;
+const d = report.data;
+const move = impliedMove(d.priceAtPublication, d.priceTarget);
+const moveColor = move >= 0 ? 'text-long' : 'text-short';
+const { Content } = await render(report);
+const hasBody = (report.body ?? '').trim().length > 0;
+
+const facts = [
+  { label: 'Price at publication', value: formatPrice(d.priceAtPublication) },
+  { label: 'Price target', value: formatPrice(d.priceTarget) },
+  { label: 'Implied to target', value: pct(move), color: moveColor },
+  { label: 'Conviction', value: d.conviction },
+  { label: 'Horizon', value: d.horizon },
+  { label: 'Sector', value: d.sector },
+];
+---
+
+<BaseLayout title={d.title} description={d.summary} type="article">
+  <article class="mx-auto max-w-4xl px-5 py-12">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-muted" aria-label="Breadcrumb">
+      <a href="/research" class="hover:text-accent">Research</a>
+      <span class="px-1.5">/</span>
+      <span class="text-ink-soft">{d.ticker}</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="mt-4 border-b border-line pb-8">
+      <div class="flex flex-wrap items-center gap-2.5">
+        <RatingBadge rating={d.rating} />
+        <span class="text-sm font-medium text-muted">{d.conviction} conviction</span>
+        {
+          d.status === 'Closed' && (
+            <span class="rounded-full border border-line px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-muted">
+              Closed
+            </span>
+          )
+        }
+        <span class="ml-auto text-sm text-muted">
+          <time datetime={d.publishDate.toISOString()}>{formatDate(d.publishDate)}</time>
+        </span>
+      </div>
+
+      <h1 class="mt-4 font-serif text-3xl leading-tight text-ink md:text-4xl">{d.title}</h1>
+      <p class="mt-2 text-lg text-muted">{d.company} · {d.ticker}</p>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ink-soft">{d.summary}</p>
+
+      <!-- Actions -->
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <a
+          href={d.pdf}
+          download
+          class="inline-flex items-center gap-2 rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"></path>
+          </svg>
+          Download PDF
+        </a>
+        {
+          d.modelUrl && (
+            <a
+              href={d.modelUrl}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-md border border-line bg-card px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-accent/60"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                <path d="M3 9h18M9 21V9"></path>
+              </svg>
+              Open the model (Google Sheets) →
+            </a>
+          )
+        }
+        <a
+          href={d.pdf}
+          target="_blank"
+          rel="noopener"
+          class="text-sm font-semibold text-accent hover:underline"
+        >
+          Open PDF in new tab
+        </a>
+      </div>
+    </header>
+
+    <!-- Key facts -->
+    <dl class="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
+      {
+        facts.map((f) => (
+          <div class="bg-card px-4 py-3">
+            <dt class="text-xs uppercase tracking-wider text-muted">{f.label}</dt>
+            <dd class:list={['mt-1 font-serif text-lg text-ink', f.color]}>{f.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <!-- Optional written notes -->
+    {
+      hasBody && (
+        <section class="mt-10">
+          <h2 class="font-serif text-xl text-ink">Analyst notes</h2>
+          <div class="rich-text mt-4">
+            <Content />
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Embedded PDF -->
+    <section class="mt-10">
+      <div class="flex items-center justify-between">
+        <h2 class="font-serif text-xl text-ink">Full report</h2>
+        <a href={d.pdf} download class="text-sm font-semibold text-accent hover:underline">
+          Download PDF
+        </a>
+      </div>
+      <div class="mt-4 overflow-hidden rounded-lg border border-line bg-paper-deep">
+        <iframe
+          src={`${d.pdf}#view=FitH`}
+          title={`${d.title} — PDF`}
+          class="h-[80vh] w-full"
+          loading="lazy"></iframe>
+      </div>
+      <p class="mt-2 text-xs text-muted">
+        PDF not displaying? <a href={d.pdf} target="_blank" rel="noopener" class="underline hover:text-accent">Open it in a new tab</a> or download it above.
+      </p>
+    </section>
+
+    <!-- Prev / next -->
+    <nav class="mt-12 grid gap-4 border-t border-line pt-8 sm:grid-cols-2" aria-label="More reports">
+      {
+        older ? (
+          <a href={`/research/${older.id}`} class="group rounded-lg border border-line bg-card p-4 transition-colors hover:border-accent/60">
+            <span class="text-xs uppercase tracking-wider text-muted">← Older report</span>
+            <span class="mt-1 block font-serif text-ink group-hover:text-accent">{older.data.ticker} · {older.data.company}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        newer && (
+          <a href={`/research/${newer.id}`} class="group rounded-lg border border-line bg-card p-4 text-right transition-colors hover:border-accent/60">
+            <span class="text-xs uppercase tracking-wider text-muted">Newer report →</span>
+            <span class="mt-1 block font-serif text-ink group-hover:text-accent">{newer.data.ticker} · {newer.data.company}</span>
+          </a>
+        )
+      }
+    </nav>
+
+    <div class="mt-12">
+      <Disclaimer variant="full" />
+    </div>
+  </article>
+</BaseLayout>

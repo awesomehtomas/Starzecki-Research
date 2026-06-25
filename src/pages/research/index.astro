@@ -1,0 +1,152 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReportCard from '../../components/ReportCard.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+
+const reports = (await getCollection('reports')).sort(
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
+);
+const sectors = [...new Set(reports.map((r) => r.data.sector))].sort();
+const ratings = ['All', 'Long', 'Short', 'Hold'] as const;
+---
+
+<BaseLayout
+  title="Research"
+  description="All Starzecki Research reports — long, short, and hold theses on under-covered equities, newest first."
+>
+  <section class="mx-auto max-w-6xl px-5 py-14">
+    <header class="max-w-2xl">
+      <h1 class="font-serif text-3xl text-ink md:text-4xl">Research</h1>
+      <p class="mt-3 leading-relaxed text-muted">
+        Deep long/short equity reports following a consistent 12-section house format. Filter by
+        sector or rating; everything is timestamped at publication.
+      </p>
+    </header>
+
+    <!-- Filter toolbar -->
+    <div class="mt-8 flex flex-col gap-4 border-y border-line py-4 md:flex-row md:items-center md:justify-between">
+      <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter by rating">
+        {
+          ratings.map((r) => (
+            <button
+              data-rating-btn={r}
+              aria-pressed={r === 'All' ? 'true' : 'false'}
+              class="rounded-full border border-line px-3.5 py-1 text-sm font-medium text-ink-soft transition-colors hover:border-accent/60 aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper"
+            >
+              {r}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <label class="flex items-center gap-2 text-sm text-muted">
+          Sector
+          <select
+            id="sector-filter"
+            class="rounded-md border border-line bg-card px-2.5 py-1.5 text-sm text-ink focus:border-accent"
+          >
+            <option value="All">All</option>
+            {sectors.map((s) => <option value={s}>{s}</option>)}
+          </select>
+        </label>
+        <label class="flex items-center gap-2 text-sm text-muted">
+          Sort
+          <select
+            id="sort-filter"
+            class="rounded-md border border-line bg-card px-2.5 py-1.5 text-sm text-ink focus:border-accent"
+          >
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <p class="mt-4 text-sm text-muted">
+      Showing <span id="result-count">{reports.length}</span> of {reports.length} reports
+    </p>
+
+    <!-- Grid -->
+    <div id="report-grid" class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        reports.map((report) => (
+          <div
+            data-report
+            data-rating={report.data.rating}
+            data-sector={report.data.sector}
+            data-date={report.data.publishDate.toISOString()}
+          >
+            <ReportCard report={report} />
+          </div>
+        ))
+      }
+    </div>
+
+    {
+      reports.length === 0 && (
+        <p class="mt-8 rounded-lg border border-dashed border-line bg-card px-5 py-10 text-center text-muted">
+          No reports published yet.
+        </p>
+      )
+    }
+
+    <p
+      id="empty-state"
+      class="mt-8 hidden rounded-lg border border-dashed border-line bg-card px-5 py-10 text-center text-muted"
+    >
+      No reports match these filters.
+    </p>
+
+    <div class="mt-12">
+      <Disclaimer variant="banner" />
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const grid = document.getElementById('report-grid');
+  const cards = Array.from(document.querySelectorAll('[data-report]')) as HTMLElement[];
+  const ratingBtns = Array.from(
+    document.querySelectorAll('[data-rating-btn]'),
+  ) as HTMLButtonElement[];
+  const sectorSel = document.getElementById('sector-filter') as HTMLSelectElement | null;
+  const sortSel = document.getElementById('sort-filter') as HTMLSelectElement | null;
+  const countEl = document.getElementById('result-count');
+  const emptyEl = document.getElementById('empty-state');
+  let activeRating = 'All';
+
+  function apply() {
+    const sector = sectorSel?.value ?? 'All';
+    let visible = 0;
+    cards.forEach((c) => {
+      const okRating = activeRating === 'All' || c.dataset.rating === activeRating;
+      const okSector = sector === 'All' || c.dataset.sector === sector;
+      const show = okRating && okSector;
+      c.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    if (countEl) countEl.textContent = String(visible);
+    if (emptyEl) emptyEl.classList.toggle('hidden', visible !== 0);
+
+    const dir = sortSel?.value ?? 'newest';
+    const sorted = [...cards].sort((a, b) =>
+      dir === 'oldest'
+        ? (a.dataset.date ?? '').localeCompare(b.dataset.date ?? '')
+        : (b.dataset.date ?? '').localeCompare(a.dataset.date ?? ''),
+    );
+    sorted.forEach((c) => grid?.appendChild(c));
+  }
+
+  ratingBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeRating = btn.dataset.ratingBtn ?? 'All';
+      ratingBtns.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      apply();
+    });
+  });
+  sectorSel?.addEventListener('change', apply);
+  sortSel?.addEventListener('change', apply);
+  apply();
+</script>
