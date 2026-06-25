@@ -2,44 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../data/site';
 
-// Timeline — edit freely. [verify] marks anything you should confirm or refine.
+// Timeline — edit freely as your story grows.
 const timeline = [
-  {
-    when: 'Undergraduate',
-    what: 'B.B.A., Hofstra University',
-    detail:
-      'Built the foundation in accounting, corporate finance, and capital markets — and discovered that the part I cared about was forming a view and defending it.',
-  },
-  {
-    when: 'Graduate',
-    what: 'M.S. in Finance — Investment Analysis concentration, Hofstra University',
-    detail:
-      'Focused coursework in valuation, financial statement analysis, and portfolio theory, geared toward buy- and sell-side analysis.',
-  },
-  {
-    when: 'In progress',
-    what: 'CFA Level I candidate',
-    detail:
-      'Working through the curriculum to sharpen the ethics, quantitative, and valuation toolkit that underpins serious research.',
-  },
-  {
-    when: 'Hands-on',
-    what: 'Hardline Capital — student-managed fund',
-    detail:
-      'A member of Hofstra’s student-managed investment fund, pitching and defending ideas to peers and faculty with real accountability for the reasoning.',
-  },
-  {
-    when: 'Ongoing',
-    what: 'Financial modeling',
-    detail:
-      'Three-statement models, DCFs, comparable-company and precedent analysis, and LBOs — built from primary filings, not templates.',
-  },
-  {
-    when: 'Now',
-    what: 'Launching Starzecki Research',
-    detail:
-      'An independent, public research project to show the work: timestamped theses, a transparent paper portfolio, and a track record I do not get to revise.',
-  },
+  { when: 'Undergraduate', what: 'B.B.A., Hofstra University · December 2024' },
+  { when: 'Graduate', what: 'M.S. in Investment Analysis, Hofstra University · December 2025' },
+  { when: 'In progress', what: 'CFA Level I candidate · Exam November 2026' },
+  { when: 'Ongoing', what: 'Financial modeling — DCF, comps, three-statement, LBO' },
+  { when: 'Now', what: 'Launching Starzecki Research' },
 ];
 ---
 
@@ -53,15 +22,17 @@ const timeline = [
 
     <div class="mt-8 space-y-5 text-lg leading-relaxed text-ink-soft">
       <p>
-        I’m {site.author}, a recent finance graduate and CFA Level I candidate. I started Starzecki
-        Research to do one thing well in public: pick a company, build a genuine point of view, and
-        put it on the record where it can be checked.
+        My name is {site.author}. I graduated in December 2025 with an M.S. in Investment Analysis
+        from Hofstra University, and I’m a CFA Level I candidate sitting for the exam in November
+        2026. Starzecki Research exists to demonstrate my work in equity research — the field my
+        education is built around. Every report is written from the perspective of a buy-side
+        analyst.
       </p>
       <p>
-        Most early-career research lives in a folder no one ever opens. I’d rather publish — clearly,
-        honestly, and on a cadence — so the quality of my thinking is visible over time rather than
-        described on a résumé. Every report is timestamped at publication, every position is
-        benchmarked against the S&amp;P 500, and the calls that don’t work stay up.
+        Most early-career analysis never leaves a laptop. I’d rather put mine in the open and let it
+        be judged over time — not as a line on a résumé, but as a public, growing body of work. Every
+        report is timestamped at publication, every position is benchmarked against the S&amp;P 500,
+        and the calls that don’t work stay up.
       </p>
     </div>
 
@@ -74,42 +45,17 @@ const timeline = [
             <span class="absolute -left-[1.6rem] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-accent bg-paper" aria-hidden="true" />
             <p class="text-xs font-semibold uppercase tracking-wider text-accent">{t.when}</p>
             <p class="mt-1 font-serif text-lg text-ink">{t.what}</p>
-            <p class="mt-1 leading-relaxed text-muted">{t.detail}</p>
           </li>
         ))
       }
     </ol>
 
-    <!-- Process -->
-    <h2 class="mt-14 font-serif text-2xl text-ink">My process &amp; philosophy</h2>
-    <div class="mt-5 space-y-4 leading-relaxed text-ink-soft">
-      <p>
-        I look for a <strong class="text-ink">variant view</strong> — a place where my read of the
-        business differs, with reasons, from what the price implies. I gravitate toward under-covered
-        small- and mid-caps where doing the work still moves the needle, and I want a
-        <strong class="text-ink"> catalyst</strong>: a reason the gap closes inside a definable
-        horizon.
-      </p>
-      <p>
-        Valuation is a reconciliation, not a single number. I anchor on a DCF built from defensible
-        operating assumptions, cross-check it against comparable companies and precedent
-        transactions, and pay attention to where those methods disagree. Then I pressure-test the
-        thesis: I write down what would prove me wrong before I need it.
-      </p>
-      <p>
-        I’d rather be judged on the <strong class="text-ink">reasoning</strong> than on any single
-        outcome. Good process produces bad outcomes sometimes; the record here is designed to make
-        both visible.
-      </p>
-    </div>
-
     <!-- Looking for -->
     <h2 class="mt-14 font-serif text-2xl text-ink">What I’m looking for</h2>
     <p class="mt-5 leading-relaxed text-ink-soft">
-      I’m early in my career and pointed squarely at <strong class="text-ink">equity research,
-      investment management, and investment banking</strong>. If you’re hiring for an analyst seat
-      and want to see how someone actually thinks about businesses and valuation, this site is the
-      audition.
+      I’m early in my career and pointed squarely at equity research, investment management, and
+      investment banking. This site is intended to show what a résumé cannot: thought process,
+      consistency, and a track record. I welcome anyone with questions to reach out.
     </p>
 
     <!-- Contact -->
