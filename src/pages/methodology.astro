@@ -3,16 +3,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Disclaimer from '../components/Disclaimer.astro';
 
 const houseFormat = [
-  ['Recommendation', 'The call (Long / Short / Hold), conviction, price target, and horizon — up front, no burying the lede.'],
+  ['Recommendation', 'The call (Long/Short/Hold), conviction, price target, horizon.'],
   ['Executive Summary', 'The thesis in a paragraph: what I think, why, and why now.'],
-  ['Company Overview', 'What the business actually does and how it makes money.'],
-  ['Industry & Competitive', 'The market structure, competitive position, and where the moat is (or isn’t).'],
-  ['Thesis & Variant View', 'Where my view differs from consensus or the price — with the reasons.'],
-  ['Catalysts', 'The specific events expected to close the gap inside the horizon.'],
+  ['Company Overview', 'How the company operates and makes money.'],
+  ['Industry & Competitive Positioning', 'The market structure and where the company stands within it.'],
+  ['Investment Thesis & Variant View', 'Where my view differs from consensus or the price — with the reasons.'],
+  ['Catalysts', 'The identifiable catalysts for the thesis to play out.'],
   ['Valuation', 'A DCF reconciled against comparable companies and precedent transactions.'],
   ['Financial Model Summary', 'Key drivers and outputs from the underlying three-statement model.'],
-  ['Sensitivity & Scenario', 'How the target moves under bear / base / bull assumptions.'],
-  ['Risks, Mitigants & Disconfirmers', 'What could break the thesis — and what I’d need to see to admit it.'],
+  ['Sensitivity & Scenario Analysis', 'How the target moves under bear / base / bull assumptions.'],
+  ['Risks, Mitigants & Disconfirmers', 'The threats to the thesis, their mitigants, and the disconfirming evidence I’m watching for.'],
   ['Position & Sizing', 'How the idea translates into a position in the paper book, and why that size.'],
   ['Appendix & Sources', 'Primary filings, data, and the trail behind the numbers.'],
 ];
@@ -20,7 +20,7 @@ const houseFormat = [
 
 <BaseLayout
   title="Methodology"
-  description="How Starzecki Research works — the 12-section house format, the paper portfolio, S&P 500 benchmarking, position sizing, and why losing calls stay published."
+  description="How Starzecki Research works — the 12-section report format, the paper portfolio, S&P 500 benchmarking, position sizing, and why losing calls stay published."
 >
   <section class="mx-auto max-w-3xl px-5 py-14">
     <h1 class="font-serif text-3xl text-ink md:text-4xl">Methodology</h1>
@@ -30,7 +30,7 @@ const houseFormat = [
     </p>
 
     <!-- House format -->
-    <h2 class="mt-12 font-serif text-2xl text-ink">The house format</h2>
+    <h2 class="mt-12 font-serif text-2xl text-ink">Anatomy of a report</h2>
     <p class="mt-3 leading-relaxed text-muted">
       Every report follows the same 12 sections. Consistency makes the work easier to read and harder
       to fudge — the same questions get answered every time.
