@@ -5,7 +5,7 @@
 export const site = {
   name: 'Starzecki Research',
   shortName: 'Starzecki Research',
-  tagline: 'Independent paper equity research — reasoning, in the open.',
+  tagline: 'Independent paper equity research.',
   description:
     'Independent, educational equity research with a transparent paper long/short portfolio. Every call is timestamped at publication and benchmarked against the S&P 500. This is not investment advice.',
   author: 'Thomas Starzecki',
