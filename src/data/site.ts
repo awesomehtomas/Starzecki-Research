@@ -9,10 +9,9 @@ export const site = {
   description:
     'Independent, educational equity research with a transparent paper long/short portfolio. Every call is timestamped at publication and benchmarked against the S&P 500. This is not investment advice.',
   author: 'Thomas Starzecki',
-  email: 'thomasstarzecki@gmail.com',
+  email: 'thomasstarzeckihof@gmail.com',
 
-  // [verify] Replace with your real LinkedIn profile URL.
-  linkedin: 'https://www.linkedin.com/in/thomas-starzecki',
+  linkedin: 'https://www.linkedin.com/in/thomas-starzecki-794751270',
 
   // Optional: paste your public Google Sheet portfolio tracker link here to
   // light up the "View the full live tracker" button on /portfolio.
