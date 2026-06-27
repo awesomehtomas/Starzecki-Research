@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import Disclaimer from '../components/Disclaimer.astro';
 
 const houseFormat = [
@@ -23,11 +24,11 @@ const houseFormat = [
   description="How Starzecki Research works — the 12-section report format, the paper portfolio, S&P 500 benchmarking, position sizing, and why losing calls stay published."
 >
   <section class="mx-auto max-w-3xl px-5 py-14">
-    <h1 class="font-serif text-3xl text-ink md:text-4xl">Methodology</h1>
-    <p class="mt-4 text-lg leading-relaxed text-ink-soft">
-      The value of research is in the reasoning and the record. This page explains exactly how both
-      are produced here so you can judge the work on its merits.
-    </p>
+    <PageHeader
+      eyebrow="How the work is made"
+      title="Methodology"
+      intro="The value of research is in the reasoning and the record. This page explains exactly how both are produced here so you can judge the work on its merits."
+    />
 
     <!-- Report format -->
     <h2 class="mt-12 font-serif text-2xl text-ink">Anatomy of a report</h2>

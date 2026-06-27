@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { site } from '../data/site';
 ---
 
@@ -8,9 +9,9 @@ import { site } from '../data/site';
   description="Starzecki Research is an independent, educational project. Nothing on this site is investment advice."
 >
   <section class="mx-auto max-w-3xl px-5 py-14">
-    <h1 class="font-serif text-3xl text-ink md:text-4xl">Disclaimer</h1>
+    <PageHeader eyebrow="Important" title="Disclaimer" />
 
-    <div class="rich-text mt-6 text-ink-soft">
+    <div class="rich-text mt-8 text-ink-soft">
       <p>
         <strong>Not investment advice.</strong> Starzecki Research is an independent, personal, and
         educational project. The content on this site is provided for informational and educational
