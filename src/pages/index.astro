@@ -2,36 +2,54 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ReportCard from '../components/ReportCard.astro';
+import RatingBadge from '../components/RatingBadge.astro';
 import NavChart from '../components/NavChart.astro';
 import Disclaimer from '../components/Disclaimer.astro';
 import { getPortfolio } from '../lib/portfolio';
 import { site } from '../data/site';
-import { pct, formatDate } from '../lib/format';
+import { pct, formatDate, formatPrice, impliedMove } from '../lib/format';
 
 const reports = (await getCollection('reports')).sort(
   (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
 );
-const latest = reports.slice(0, 3);
+const featured = reports[0] ?? null;
+const rest = reports.slice(1, 4);
 const pf = getPortfolio();
+const fMove = featured ? impliedMove(featured.data.priceAtPublication, featured.data.priceTarget) : 0;
+
+const pillars = [
+  {
+    label: 'Research',
+    href: '/research',
+    body: 'In-depth long/short reports, each following the same 12-section format.',
+  },
+  {
+    label: 'Portfolio',
+    href: '/portfolio',
+    body: 'A hypothetical paper book, marked to market and benchmarked against the S&P 500.',
+  },
+  {
+    label: 'Methodology',
+    href: '/methodology',
+    body: 'How the work is produced — and why losing calls stay published.',
+  },
+];
+
+const eyebrow = 'text-xs font-semibold uppercase tracking-[0.2em] text-accent';
 ---
 
 <BaseLayout title={site.name} description={site.description}>
   <!-- Hero -->
   <section class="border-b border-line">
-    <div class="mx-auto max-w-6xl px-5 py-20 md:py-28">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-        Independent equity research
-      </p>
-      <h1 class="mt-4 max-w-3xl font-serif text-4xl leading-[1.1] text-ink md:text-6xl">
-        Analysis in the open.
-      </h1>
-      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
+    <div class="mx-auto max-w-3xl px-5 py-20 text-center md:py-24">
+      <p class={eyebrow}>Independent equity research</p>
+      <h1 class="mt-5 font-serif text-4xl leading-[1.08] text-ink md:text-6xl">Analysis in the open.</h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
         Starzecki Research publishes in-depth long/short equity research — every call timestamped at
         publication, benchmarked against the S&amp;P 500, and left on the record whether it works or
-        not. It’s an educational paper portfolio, built to show the rigor of the work behind it. This
-        is not investment advice.
+        not.
       </p>
-      <div class="mt-8 flex flex-wrap items-center gap-3">
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
         <a
           href="/research"
           class="inline-flex items-center gap-2 rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft"
@@ -45,67 +63,144 @@ const pf = getPortfolio();
           See the paper portfolio
         </a>
       </div>
+    </div>
+  </section>
 
-      <!-- Stat strip -->
-      <dl class="mt-12 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
-        <div class="bg-card px-5 py-4">
+  <!-- Stats band -->
+  <section class="border-b border-line bg-paper-deep">
+    <div class="mx-auto max-w-6xl px-5">
+      <dl class="grid grid-cols-2 divide-line md:grid-cols-4 md:divide-x">
+        <div class="px-2 py-6 text-center">
           <dt class="text-xs uppercase tracking-wider text-muted">Reports published</dt>
           <dd class="mt-1 font-serif text-2xl text-ink">{reports.length}</dd>
         </div>
-        <div class="bg-card px-5 py-4">
+        <div class="px-2 py-6 text-center">
           <dt class="text-xs uppercase tracking-wider text-muted">Paper NAV</dt>
           <dd class="mt-1 font-serif text-2xl text-ink">{pct(pf.navReturn)}</dd>
         </div>
-        <div class="bg-card px-5 py-4">
+        <div class="px-2 py-6 text-center">
           <dt class="text-xs uppercase tracking-wider text-muted">vs S&amp;P 500</dt>
-          <dd
-            class:list={[
-              'mt-1 font-serif text-2xl',
-              pf.excess >= 0 ? 'text-long' : 'text-short',
-            ]}
-          >
+          <dd class:list={['mt-1 font-serif text-2xl', pf.excess >= 0 ? 'text-long' : 'text-short']}>
             {pct(pf.excess)}
           </dd>
+        </div>
+        <div class="px-2 py-6 text-center">
+          <dt class="text-xs uppercase tracking-wider text-muted">Since inception</dt>
+          <dd class="mt-1 font-serif text-2xl text-ink">{formatDate(new Date(pf.inceptionDate))}</dd>
         </div>
       </dl>
     </div>
   </section>
 
-  <!-- Latest reports -->
+  <!-- Featured / latest report -->
   <section class="mx-auto max-w-6xl px-5 py-16">
-    <div class="flex items-end justify-between">
-      <div>
-        <h2 class="font-serif text-2xl text-ink">Latest research</h2>
-        <p class="mt-1 text-sm text-muted">In-depth reports, published regularly.</p>
-      </div>
+    <div class="flex items-end justify-between border-b border-line pb-4">
+      <h2 class="font-serif text-2xl text-ink">Latest research</h2>
       <a href="/research" class="text-sm font-semibold text-accent hover:underline">All reports →</a>
     </div>
 
     {
-      latest.length > 0 ? (
-        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {latest.map((report) => (
-            <ReportCard report={report} />
-          ))}
+      featured ? (
+        <div class="mt-8 grid gap-10 lg:grid-cols-5">
+          <article class="lg:col-span-3">
+            <p class={eyebrow}>Latest report · {formatDate(featured.data.publishDate)}</p>
+            <div class="mt-3 flex items-center gap-2.5">
+              <RatingBadge rating={featured.data.rating} />
+              <span class="text-sm font-medium text-muted">{featured.data.conviction} conviction</span>
+            </div>
+            <h3 class="mt-4 font-serif text-3xl leading-tight text-ink">
+              <a href={`/research/${featured.id}`} class="hover:text-accent">{featured.data.title}</a>
+            </h3>
+            <p class="mt-2 text-muted">{featured.data.company} · {featured.data.ticker}</p>
+            <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-soft">{featured.data.summary}</p>
+            <a
+              href={`/research/${featured.id}`}
+              class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline"
+            >
+              Read the report →
+            </a>
+          </article>
+
+          <aside class="lg:col-span-2">
+            <div class="rounded-lg border border-line bg-card p-5">
+              <p class="text-xs uppercase tracking-wider text-muted">At a glance</p>
+              <dl class="mt-3 space-y-3 text-sm">
+                <div class="flex items-center justify-between border-b border-line pb-3">
+                  <dt class="text-muted">Price at publication</dt>
+                  <dd class="font-serif text-ink">{formatPrice(featured.data.priceAtPublication)}</dd>
+                </div>
+                <div class="flex items-center justify-between border-b border-line pb-3">
+                  <dt class="text-muted">Price target</dt>
+                  <dd class="font-serif text-ink">{formatPrice(featured.data.priceTarget)}</dd>
+                </div>
+                <div class="flex items-center justify-between border-b border-line pb-3">
+                  <dt class="text-muted">Implied to target</dt>
+                  <dd class:list={['font-serif', fMove >= 0 ? 'text-long' : 'text-short']}>{pct(fMove)}</dd>
+                </div>
+                <div class="flex items-center justify-between">
+                  <dt class="text-muted">Horizon</dt>
+                  <dd class="font-serif text-ink">{featured.data.horizon}</dd>
+                </div>
+              </dl>
+            </div>
+          </aside>
         </div>
       ) : (
-        <p class="mt-8 rounded-lg border border-dashed border-line bg-card px-5 py-10 text-center text-muted">
-          No reports yet. Your first published report will appear here automatically.
-        </p>
+        <div class="mt-8 rounded-lg border border-dashed border-line bg-card px-6 py-14 text-center">
+          <p class="font-serif text-xl text-ink">The first report publishes soon.</p>
+          <p class="mx-auto mt-2 max-w-md text-muted">
+            When it's live, the latest report will headline here — with its thesis, rating, and price
+            target front and center.
+          </p>
+        </div>
       )
     }
   </section>
 
-  <!-- Portfolio snapshot -->
+  <!-- What you'll find -->
   <section class="border-y border-line bg-paper-deep">
+    <div class="mx-auto max-w-6xl px-5 py-14">
+      <p class={eyebrow}>What you'll find here</p>
+      <div class="mt-6 grid gap-8 md:grid-cols-3">
+        {
+          pillars.map((p) => (
+            <div class="border-t-2 border-ink pt-4">
+              <h3 class="font-serif text-xl text-ink">{p.label}</h3>
+              <p class="mt-2 leading-relaxed text-muted">{p.body}</p>
+              <a href={p.href} class="mt-3 inline-block text-sm font-semibold text-accent hover:underline">
+                {p.label === 'Research' ? 'Browse reports' : p.label === 'Portfolio' ? 'View the book' : 'How it works'} →
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- More research -->
+  {
+    rest.length > 0 && (
+      <section class="mx-auto max-w-6xl px-5 py-16">
+        <h2 class="font-serif text-2xl text-ink">More research</h2>
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {rest.map((report) => (
+            <ReportCard report={report} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Portfolio snapshot -->
+  <section class="border-t border-line bg-paper-deep">
     <div class="mx-auto max-w-6xl px-5 py-16">
       <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
         <div>
-          <h2 class="font-serif text-2xl text-ink">The paper portfolio</h2>
+          <p class={eyebrow}>The paper portfolio</p>
+          <h2 class="mt-3 font-serif text-2xl text-ink">Marked to market, benchmarked, on the record.</h2>
           <p class="mt-3 max-w-md leading-relaxed text-ink-soft">
-            A hypothetical $100MM long/short book, marked to market and benchmarked against the
-            S&amp;P 500 since inception on {formatDate(new Date(pf.inceptionDate))}. Price-only, no
-            real capital — the point is to judge the reasoning over time.
+            A hypothetical $100MM long/short book tracked against the S&amp;P 500 since inception.
+            Price-only, no real capital — the point is to judge the reasoning over time.
           </p>
           <dl class="mt-6 grid grid-cols-3 gap-4">
             <div>
@@ -118,9 +213,7 @@ const pf = getPortfolio();
             </div>
             <div>
               <dt class="text-xs uppercase tracking-wider text-muted">Excess</dt>
-              <dd
-                class:list={['mt-1 font-serif text-xl', pf.excess >= 0 ? 'text-long' : 'text-short']}
-              >
+              <dd class:list={['mt-1 font-serif text-xl', pf.excess >= 0 ? 'text-long' : 'text-short']}>
                 {pct(pf.excess)}
               </dd>
             </div>
