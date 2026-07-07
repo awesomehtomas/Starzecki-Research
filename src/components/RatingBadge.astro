@@ -5,21 +5,19 @@ interface Props {
 }
 const { rating, size = 'md' } = Astro.props;
 
+// Square-cornered "stamp" in the rating's own semantic color (see DESIGN.md).
 // Full literal class strings so Tailwind's scanner includes them in the build.
 const styles: Record<Props['rating'], string> = {
-  Long: 'bg-long-bg text-long',
-  Short: 'bg-short-bg text-short',
-  Hold: 'bg-hold-bg text-hold',
+  Long: 'text-long',
+  Short: 'text-short',
+  Hold: 'text-hold',
 };
-const pad = size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs';
+const pad =
+  size === 'sm'
+    ? 'px-1.5 py-[3px] text-[10px] tracking-[0.12em]'
+    : 'px-2 py-1 text-[11px] tracking-[0.12em]';
 ---
 
-<span
-  class:list={[
-    'inline-flex items-center rounded-full font-semibold uppercase tracking-wider',
-    pad,
-    styles[rating],
-  ]}
->
+<span class:list={['stamp', pad, styles[rating]]}>
   {rating}
 </span>

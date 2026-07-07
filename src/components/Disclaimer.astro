@@ -9,15 +9,15 @@ const { variant = 'banner' } = Astro.props;
 
 {
   variant === 'banner' ? (
-    <p class="rounded-md border border-line bg-paper-deep px-4 py-3 text-xs leading-relaxed text-muted">
+    <p class="border-y border-line py-3 font-sans text-xs leading-relaxed text-muted">
       <span class="font-semibold text-ink">Educational use only.</span> {site.notAdvice}{' '}
-      <a href="/disclaimer" class="underline decoration-line underline-offset-2 hover:text-accent">
+      <a href="/disclaimer" class="link">
         Full disclaimer
       </a>
       .
     </p>
   ) : (
-    <div class="rounded-md border border-line bg-paper-deep px-5 py-4 text-sm leading-relaxed text-muted">
+    <div class="border-y border-line py-4 font-sans text-sm leading-relaxed text-muted">
       <p>
         <span class="font-semibold text-ink">Not investment advice.</span> Starzecki Research is an
         independent, educational project. Nothing here is a recommendation to buy or sell any

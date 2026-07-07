@@ -80,6 +80,17 @@ async function askNumber(question, def) {
   }
 }
 
+// Optional number — Enter skips, anything else must parse.
+async function askOptionalNumber(question) {
+  while (true) {
+    const a = await ask(question, '');
+    if (a === '') return null;
+    const n = Number(a);
+    if (!Number.isNaN(n)) return n;
+    console.log('  Please enter a number (e.g. 8.5) or press Enter to skip.');
+  }
+}
+
 console.log('\n  New report  —  press Enter to accept the [default].\n');
 
 const ticker = (await ask('Ticker (e.g. VITL)')).toUpperCase();
@@ -93,6 +104,8 @@ const conviction = await askChoice('Conviction', ['Low', 'Medium', 'High'], 'Med
 const priceAtPublication = await askNumber('Price at publication', '0');
 const priceTarget = await askNumber('Price target', '0');
 const horizon = await ask('Horizon', '12–18 months');
+const evEbitda = await askOptionalNumber('EV/EBITDA multiple (optional, e.g. 8.5 — Enter to skip)');
+const fcfYield = await askOptionalNumber('FCF yield % (optional, e.g. 5.2 — Enter to skip)');
 const status = await askChoice('Status', ['Open', 'Closed'], 'Open');
 const summary = await ask('One-line summary (shown on cards)', 'TODO: 1–2 sentence thesis.');
 
@@ -123,6 +136,8 @@ const fm = [
   `priceAtPublication: ${priceAtPublication}`,
   `priceTarget: ${priceTarget}`,
   `horizon: ${JSON.stringify(horizon)}`,
+  ...(evEbitda != null ? [`evEbitda: ${evEbitda}`] : []),
+  ...(fcfYield != null ? [`fcfYield: ${fcfYield}`] : []),
   `status: ${JSON.stringify(status)}`,
   `summary: ${JSON.stringify(summary)}`,
   `pdf: ${JSON.stringify(pdf)}`,

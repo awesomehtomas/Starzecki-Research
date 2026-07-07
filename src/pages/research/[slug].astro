@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RatingBadge from '../../components/RatingBadge.astro';
 import Disclaimer from '../../components/Disclaimer.astro';
+import { site } from '../../data/site';
 import { formatDate, formatPrice, impliedMove, pct } from '../../lib/format';
 
 export async function getStaticPaths() {
@@ -33,95 +34,89 @@ const moveColor = move >= 0 ? 'text-long' : 'text-short';
 const { Content } = await render(report);
 const hasBody = (report.body ?? '').trim().length > 0;
 
-const facts = [
-  { label: 'Price at publication', value: formatPrice(d.priceAtPublication) },
-  { label: 'Price target', value: formatPrice(d.priceTarget) },
-  { label: 'Implied to target', value: pct(move), color: moveColor },
+/*
+  Tearsheet cells. Rating renders as a stamp; everything else is a mono
+  figure. Valuation anchors appear only when the frontmatter provides them.
+*/
+const cells: { label: string; value?: string; color?: string; stamp?: boolean }[] = [
+  { label: 'Rating', stamp: true },
   { label: 'Conviction', value: d.conviction },
+  { label: 'Entry', value: formatPrice(d.priceAtPublication) },
+  { label: 'Price target', value: formatPrice(d.priceTarget) },
+  { label: 'Implied upside', value: pct(move), color: moveColor },
   { label: 'Horizon', value: d.horizon },
-  { label: 'Sector', value: d.sector },
 ];
-
-const eyebrow = 'text-xs font-semibold uppercase tracking-[0.2em] text-accent';
+if (d.evEbitda != null) cells.push({ label: 'EV/EBITDA', value: `${d.evEbitda}×` });
+if (d.fcfYield != null) cells.push({ label: 'FCF yield', value: `${d.fcfYield}%` });
 ---
 
 <BaseLayout title={d.title} description={d.summary} type="article">
-  <article class="mx-auto max-w-4xl px-5 py-12">
+  <article class="mx-auto max-w-4xl px-5 py-10 md:py-12">
     <!-- Breadcrumb -->
-    <nav class="text-sm text-muted" aria-label="Breadcrumb">
+    <nav class="font-sans text-sm text-muted" aria-label="Breadcrumb">
       <a href="/research" class="hover:text-accent">Research</a>
-      <span class="px-1.5">/</span>
-      <span class="text-ink-soft">{d.ticker}</span>
+      <span class="px-1.5" aria-hidden="true">/</span>
+      <span class="figure text-ink-soft">{d.ticker}</span>
     </nav>
 
     <!-- Masthead -->
-    <header class="mt-5 border-b border-line pb-8">
-      <p class={eyebrow}>
-        Equity research · <time datetime={d.publishDate.toISOString()}>{formatDate(d.publishDate)}</time>
+    <header class="mt-6">
+      <p class="label-caps">Equity research</p>
+      <h1 class="mt-3 font-serif text-3xl leading-tight text-ink md:text-[2.75rem] md:leading-[1.1]">
+        {d.title}
+      </h1>
+      <p class="mt-4 font-sans text-sm text-muted">
+        <span class="figure font-semibold text-ink">{d.ticker}</span>
+        <span class="px-1.5" aria-hidden="true">·</span>{d.company}
+        <span class="px-1.5" aria-hidden="true">·</span>{d.sector}
       </p>
-      <h1 class="mt-3 font-serif text-3xl leading-tight text-ink md:text-4xl">{d.title}</h1>
-      <p class="mt-2 text-lg text-muted">{d.company} · {d.ticker}</p>
-
-      <div class="mt-4 flex flex-wrap items-center gap-2.5">
-        <RatingBadge rating={d.rating} />
-        <span class="text-sm font-medium text-muted">{d.conviction} conviction</span>
+      <p class="mt-2 font-sans text-sm text-muted">
+        By <span class="font-medium text-ink-soft">{site.author}</span>
+        <span class="px-1.5" aria-hidden="true">·</span>
+        <time datetime={d.publishDate.toISOString()} class="figure">{formatDate(d.publishDate)}</time>
         {
           d.status === 'Closed' && (
-            <span class="rounded-full border border-line px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-muted">
-              Closed
-            </span>
+            <span class="stamp ml-2 px-1.5 py-[3px] text-[10px] tracking-[0.12em] text-muted">Closed</span>
           )
         }
-      </div>
+      </p>
 
-      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ink-soft">{d.summary}</p>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">{d.summary}</p>
 
       <!-- Actions -->
-      <div class="mt-7 flex flex-wrap items-center gap-3">
-        <a
-          href={d.pdf}
-          download
-          class="inline-flex items-center gap-2 rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <div class="mt-7 flex flex-wrap items-center gap-4">
+        <a href={d.pdf} download class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"></path>
           </svg>
           Download PDF
         </a>
         {
           d.modelUrl && (
-            <a
-              href={d.modelUrl}
-              target="_blank"
-              rel="noopener"
-              class="inline-flex items-center gap-2 rounded-md border border-line bg-card px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-accent/60"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                <path d="M3 9h18M9 21V9"></path>
-              </svg>
-              Open the model (Google Sheets) →
+            <a href={d.modelUrl} target="_blank" rel="noopener" class="btn btn-outline">
+              Open the model
             </a>
           )
         }
-        <a
-          href={d.pdf}
-          target="_blank"
-          rel="noopener"
-          class="text-sm font-semibold text-accent hover:underline"
-        >
+        <a href={d.pdf} target="_blank" rel="noopener" class="link font-sans text-sm font-medium">
           Open PDF in new tab
         </a>
       </div>
     </header>
 
-    <!-- Key facts -->
-    <dl class="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
+    <div class="rule-double mt-8" aria-hidden="true"></div>
+
+    <!-- Tearsheet -->
+    <dl
+      class="grid border border-t-0 border-ink bg-card sm:grid-cols-2 [&>div]:border-t [&>div]:border-line [&>div:first-child]:border-t-0 sm:[&>div:nth-child(2)]:border-t-0 sm:[&>div:nth-child(odd)]:border-r sm:[&>div:nth-child(odd)]:border-r-line"
+    >
       {
-        facts.map((f) => (
-          <div class="bg-card px-4 py-3">
-            <dt class="text-xs uppercase tracking-wider text-muted">{f.label}</dt>
-            <dd class:list={['mt-1 font-serif text-lg text-ink', f.color]}>{f.value}</dd>
+        cells.map((cell) => (
+          <div class="flex items-center justify-between gap-4 px-4 py-3">
+            <dt class="label-caps">{cell.label}</dt>
+            <dd class:list={['figure text-sm font-medium', cell.color ?? 'text-ink']}>
+              {cell.stamp ? <RatingBadge rating={d.rating} size="sm" /> : cell.value}
+            </dd>
           </div>
         ))
       }
@@ -131,8 +126,8 @@ const eyebrow = 'text-xs font-semibold uppercase tracking-[0.2em] text-accent';
     {
       hasBody && (
         <section class="mt-12">
-          <h2 class="border-b border-line pb-3 font-serif text-xl text-ink">Analyst notes</h2>
-          <div class="rich-text mt-5">
+          <h2 class="border-b border-ink pb-3 font-serif text-2xl text-ink">Analyst notes</h2>
+          <div class="rich-text mt-6">
             <Content />
           </div>
         </section>
@@ -141,12 +136,12 @@ const eyebrow = 'text-xs font-semibold uppercase tracking-[0.2em] text-accent';
 
     <!-- Embedded PDF -->
     <section class="mt-12">
-      <div class="overflow-hidden rounded-lg border border-line">
-        <div class="flex items-center justify-between border-b border-line bg-paper-deep px-4 py-2.5">
-          <span class="text-xs font-medium uppercase tracking-wider text-muted">
-            {d.ticker} · full report
+      <div class="border border-ink">
+        <div class="flex items-center justify-between border-b border-ink bg-paper-deep px-4 py-2.5">
+          <span class="label-caps">
+            <span class="figure">{d.ticker}</span> · Full report
           </span>
-          <a href={d.pdf} download class="text-xs font-semibold text-accent hover:underline">
+          <a href={d.pdf} download class="link font-sans text-xs font-semibold">
             Download PDF
           </a>
         </div>
@@ -156,28 +151,32 @@ const eyebrow = 'text-xs font-semibold uppercase tracking-[0.2em] text-accent';
           class="h-[80vh] w-full bg-paper-deep"
           loading="lazy"></iframe>
       </div>
-      <p class="mt-2 text-xs text-muted">
-        PDF not displaying? <a href={d.pdf} target="_blank" rel="noopener" class="underline hover:text-accent">Open it in a new tab</a> or download it above.
+      <p class="mt-2 font-sans text-xs text-muted">
+        PDF not displaying? <a href={d.pdf} target="_blank" rel="noopener" class="link">Open it in a new tab</a> or download it above.
       </p>
     </section>
 
     <!-- Prev / next -->
-    <nav class="mt-12 grid gap-4 border-t border-line pt-8 sm:grid-cols-2" aria-label="More reports">
+    <nav class="mt-12 grid gap-x-8 border-t border-ink sm:grid-cols-2" aria-label="More reports">
       {
         older ? (
-          <a href={`/research/${older.id}`} class="group rounded-lg border border-line bg-card p-4 transition-colors hover:border-accent/60">
-            <span class="text-xs uppercase tracking-wider text-muted">← Older report</span>
-            <span class="mt-1 block font-serif text-ink group-hover:text-accent">{older.data.ticker} · {older.data.company}</span>
+          <a href={`/research/${older.id}`} class="group border-b border-line py-4">
+            <span class="label-caps">Older report</span>
+            <span class="mt-1 block font-serif text-lg text-ink transition-colors group-hover:text-accent">
+              <span class="figure text-sm font-semibold">{older.data.ticker}</span> · {older.data.company}
+            </span>
           </a>
         ) : (
-          <span />
+          <span class="hidden sm:block" />
         )
       }
       {
         newer && (
-          <a href={`/research/${newer.id}`} class="group rounded-lg border border-line bg-card p-4 text-right transition-colors hover:border-accent/60">
-            <span class="text-xs uppercase tracking-wider text-muted">Newer report →</span>
-            <span class="mt-1 block font-serif text-ink group-hover:text-accent">{newer.data.ticker} · {newer.data.company}</span>
+          <a href={`/research/${newer.id}`} class="group border-b border-line py-4 sm:text-right">
+            <span class="label-caps">Newer report</span>
+            <span class="mt-1 block font-serif text-lg text-ink transition-colors group-hover:text-accent">
+              <span class="figure text-sm font-semibold">{newer.data.ticker}</span> · {newer.data.company}
+            </span>
           </a>
         )
       }

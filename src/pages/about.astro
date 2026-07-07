@@ -16,9 +16,11 @@ const timeline = [
   title="About"
   description="Thomas Starzecki — finance graduate, CFA Level I candidate, and the analyst behind Starzecki Research. My path in finance and how I approach equity research."
 >
-  <section class="mx-auto max-w-3xl px-5 py-14">
-    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent">My finance journey</p>
-    <h1 class="mt-3 font-serif text-3xl text-ink md:text-4xl">About</h1>
+  <section class="mx-auto max-w-3xl px-5 py-12">
+    <header class="border-b border-ink pb-7">
+      <p class="label-caps">My finance journey</p>
+      <h1 class="mt-3 font-serif text-3xl text-ink md:text-4xl">About</h1>
+    </header>
 
     <div class="mt-8 space-y-5 text-lg leading-relaxed text-ink-soft">
       <p>
@@ -37,21 +39,20 @@ const timeline = [
     </div>
 
     <!-- Timeline -->
-    <h2 class="mt-14 font-serif text-2xl text-ink">The journey so far</h2>
-    <ol class="mt-6 space-y-6 border-l border-line pl-6">
+    <h2 class="mt-14 border-b border-ink pb-3 font-serif text-2xl text-ink">The journey so far</h2>
+    <ol>
       {
         timeline.map((t) => (
-          <li class="relative">
-            <span class="absolute -left-[1.6rem] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-accent bg-paper" aria-hidden="true" />
-            <p class="text-xs font-semibold uppercase tracking-wider text-accent">{t.when}</p>
-            <p class="mt-1 font-serif text-lg text-ink">{t.what}</p>
+          <li class="grid gap-x-8 gap-y-1 border-b border-line py-4 sm:grid-cols-[8.5rem_1fr] sm:items-baseline">
+            <p class="label-caps">{t.when}</p>
+            <p class="font-serif text-lg text-ink">{t.what}</p>
           </li>
         ))
       }
     </ol>
 
     <!-- Looking for -->
-    <h2 class="mt-14 font-serif text-2xl text-ink">What I’m looking for</h2>
+    <h2 class="mt-14 border-b border-ink pb-3 font-serif text-2xl text-ink">What I’m looking for</h2>
     <p class="mt-5 leading-relaxed text-ink-soft">
       I’m early in my career and pointed squarely at equity research, investment management, and
       investment banking. This site is intended to show what a résumé cannot: thought process,
@@ -59,22 +60,14 @@ const timeline = [
     </p>
 
     <!-- Contact -->
-    <div class="mt-14 rounded-lg border border-line bg-card p-6">
+    <div class="mt-14 border border-ink bg-card p-6">
       <h2 class="font-serif text-xl text-ink">Get in touch</h2>
-      <p class="mt-2 text-muted">I’d welcome a conversation — feedback, ideas, or opportunities.</p>
-      <div class="mt-4 flex flex-wrap gap-3">
-        <a
-          href={site.linkedin}
-          target="_blank"
-          rel="me noopener"
-          class="inline-flex items-center gap-2 rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper hover:bg-ink-soft"
-        >
-          Connect on LinkedIn →
+      <p class="mt-2 font-sans text-sm text-muted">I’d welcome a conversation — feedback, ideas, or opportunities.</p>
+      <div class="mt-5 flex flex-wrap gap-4">
+        <a href={site.linkedin} target="_blank" rel="me noopener" class="btn btn-primary">
+          Connect on LinkedIn
         </a>
-        <a
-          href={`mailto:${site.email}`}
-          class="inline-flex items-center gap-2 rounded-md border border-line bg-card px-5 py-2.5 text-sm font-semibold text-ink hover:border-accent/60"
-        >
+        <a href={`mailto:${site.email}`} class="btn btn-outline normal-case tracking-normal">
           {site.email}
         </a>
       </div>

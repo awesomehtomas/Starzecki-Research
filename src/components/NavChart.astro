@@ -50,9 +50,9 @@ if (enough) {
 
 {
   !enough && (
-    <div class="flex h-48 flex-col items-center justify-center rounded-md border border-dashed border-line bg-paper-deep text-center">
-      <p class="text-sm font-medium text-ink">Your NAV vs S&amp;P chart appears here</p>
-      <p class="mt-1 max-w-xs text-xs text-muted">
+    <div class="flex h-48 flex-col items-center justify-center border border-dashed border-line bg-paper-deep text-center">
+      <p class="font-sans text-sm font-medium text-ink">Your NAV vs S&amp;P chart appears here</p>
+      <p class="mt-1 max-w-xs font-sans text-xs text-muted">
         Add a second point to <code>navHistory</code> in <code>src/data/portfolio.json</code> as your
         track record builds.
       </p>
@@ -76,31 +76,31 @@ if (enough) {
       class="stroke-line"
       stroke-width="1"
       stroke-dasharray="3 4"></line>
-    <text x={pad.left - 6} y={baseY + 3} text-anchor="end" class="fill-muted" font-size="10">100</text>
+    <text x={pad.left - 6} y={baseY + 3} text-anchor="end" class="figure fill-muted" font-size="10">100</text>
 
     <!-- S&P 500 -->
     <polyline points={spxPts} class="fill-none stroke-muted" stroke-width="1.75" stroke-dasharray="5 4"></polyline>
 
     <!-- Paper NAV -->
-    <polygon points={navArea} class="fill-accent/10"></polygon>
-    <polyline points={navPts} class="fill-none stroke-accent" stroke-width="2.5" stroke-linejoin="round"></polyline>
-    <circle cx={lastX} cy={lastNavY} r="3.5" class="fill-accent"></circle>
+    <polygon points={navArea} class="fill-ink/5"></polygon>
+    <polyline points={navPts} class="fill-none stroke-ink" stroke-width="2.5" stroke-linejoin="round"></polyline>
+    <circle cx={lastX} cy={lastNavY} r="3.5" class="fill-ink"></circle>
 
     <!-- x-axis end labels -->
-    <text x={pad.left} y={H - 12} text-anchor="start" class="fill-muted" font-size="10">
+    <text x={pad.left} y={H - 12} text-anchor="start" class="figure fill-muted" font-size="10">
       {formatDate(new Date(history[0].date))}
     </text>
-    <text x={pad.left + innerW} y={H - 12} text-anchor="end" class="fill-muted" font-size="10">
+    <text x={pad.left + innerW} y={H - 12} text-anchor="end" class="figure fill-muted" font-size="10">
       {formatDate(new Date(last.date))}
     </text>
   </svg>
 
-  <figcaption class="mt-3 flex items-center gap-5 text-xs text-muted">
+  <figcaption class="mt-3 flex items-center gap-5 font-sans text-xs text-muted">
     <span class="inline-flex items-center gap-2">
-      <span class="inline-block h-0.5 w-5 rounded bg-accent"></span> Paper NAV
+      <span class="inline-block h-0.5 w-5 bg-ink"></span> Paper NAV
     </span>
     <span class="inline-flex items-center gap-2">
-      <span class="inline-block h-0.5 w-5 rounded bg-muted"></span> S&amp;P 500
+      <span class="inline-block h-0.5 w-5 bg-muted"></span> S&amp;P 500
     </span>
     <span class="ml-auto">Indexed to 100 at inception · price-only</span>
   </figcaption>

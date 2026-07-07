@@ -1,0 +1,48 @@
+---
+import RatingBadge from './RatingBadge.astro';
+
+/*
+  Tearsheet stat block — the signature element (see DESIGN.md §4).
+  A bordered sheet: ticker + rating stamp in the header strip, then
+  hairline-ruled rows with label-caps labels and right-aligned mono figures.
+*/
+interface Row {
+  label: string;
+  value: string;
+  color?: string; // e.g. 'text-long' / 'text-short' when the sign is the point
+}
+interface Props {
+  ticker?: string;
+  company?: string;
+  rating?: 'Long' | 'Short' | 'Hold';
+  rows: Row[];
+  note?: string;
+}
+const { ticker, company, rating, rows, note } = Astro.props;
+const hasHeader = ticker || company || rating;
+---
+
+<div class="border border-ink bg-card">
+  {
+    hasHeader && (
+      <div class="flex items-center justify-between gap-3 border-b border-ink px-4 py-3">
+        <div class="flex items-baseline gap-2 overflow-hidden">
+          {ticker && <span class="figure text-sm font-semibold text-ink">{ticker}</span>}
+          {company && <span class="truncate font-sans text-sm text-muted">{company}</span>}
+        </div>
+        {rating && <RatingBadge rating={rating} size="sm" />}
+      </div>
+    )
+  }
+  <dl>
+    {
+      rows.map((row) => (
+        <div class="flex items-center justify-between gap-4 border-b border-line px-4 py-2.5 last:border-b-0">
+          <dt class="label-caps">{row.label}</dt>
+          <dd class:list={['figure text-sm font-medium', row.color ?? 'text-ink']}>{row.value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+  {note && <p class="border-t border-line px-4 py-2.5 font-sans text-xs text-muted">{note}</p>}
+</div>

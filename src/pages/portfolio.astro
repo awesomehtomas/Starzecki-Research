@@ -26,7 +26,7 @@ const stats = [
   title="Portfolio"
   description="The Starzecki Research paper portfolio — a hypothetical $100MM long/short book, marked to market and benchmarked against the S&P 500."
 >
-  <section class="mx-auto max-w-6xl px-5 pt-14">
+  <section class="mx-auto max-w-5xl px-5 pt-12">
     <PageHeader
       eyebrow="The paper portfolio"
       title="Portfolio"
@@ -35,28 +35,26 @@ const stats = [
   </section>
 
   <!-- Headline stats band -->
-  <section class="mt-8 border-y border-line bg-paper-deep">
-    <div class="mx-auto max-w-6xl px-5">
-      <dl class="grid grid-cols-2 divide-line md:grid-cols-4 md:divide-x">
-        {
-          stats.map((s) => (
-            <div class="px-4 py-6 text-center">
-              <dt class="text-xs uppercase tracking-wider text-muted">{s.label}</dt>
-              <dd class:list={['mt-1 font-serif text-2xl text-ink', s.color]}>{s.value}</dd>
-              <dd class="mt-0.5 text-xs text-muted">{s.sub}</dd>
-            </div>
-          ))
-        }
-      </dl>
-    </div>
+  <section class="mx-auto max-w-5xl px-5">
+    <dl class="grid grid-cols-2 gap-y-6 border-b border-line py-6 sm:grid-cols-4 sm:divide-x sm:divide-line">
+      {
+        stats.map((s, i) => (
+          <div class:list={['pr-4', i > 0 && 'sm:pl-6']}>
+            <dt class="label-caps">{s.label}</dt>
+            <dd class:list={['figure mt-2 text-xl font-medium', s.color ?? 'text-ink']}>{s.value}</dd>
+            <dd class="mt-1 font-sans text-xs text-muted">{s.sub}</dd>
+          </div>
+        ))
+      }
+    </dl>
   </section>
 
-  <section class="mx-auto max-w-6xl px-5 py-14">
+  <section class="mx-auto max-w-5xl px-5 py-12">
     <!-- Chart -->
-    <div class="rounded-lg border border-line bg-card p-6">
+    <div class="border border-ink bg-card p-6">
       <div class="border-b border-line pb-4">
         <h2 class="font-serif text-xl text-ink">NAV vs S&amp;P 500</h2>
-        <p class="mt-1 text-sm text-muted">Both indexed to 100 at inception.</p>
+        <p class="mt-1 font-sans text-sm text-muted">Both indexed to 100 at inception.</p>
       </div>
       <div class="mt-5">
         <NavChart history={pf.history} />
@@ -64,46 +62,41 @@ const stats = [
     </div>
 
     <!-- Positions -->
-    <div class="mt-12">
-      <div class="flex items-end justify-between border-b border-line pb-4">
+    <div class="mt-14">
+      <div class="flex items-baseline justify-between border-b border-ink pb-3">
         <h2 class="font-serif text-2xl text-ink">Positions</h2>
         {
           site.portfolioSheetUrl ? (
-            <a
-              href={site.portfolioSheetUrl}
-              target="_blank"
-              rel="noopener"
-              class="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline"
-            >
-              Live tracker (Google Sheets) →
+            <a href={site.portfolioSheetUrl} target="_blank" rel="noopener" class="link font-sans text-sm">
+              Live tracker (Google Sheets)
             </a>
           ) : (
-            <span class="text-xs text-muted">Live tracker link coming soon</span>
+            <span class="font-sans text-xs text-muted">Live tracker link coming soon</span>
           )
         }
       </div>
 
-      <div class="mt-6 overflow-x-auto rounded-lg border border-line">
+      <div class="overflow-x-auto">
         <table class="w-full min-w-[760px] border-collapse text-sm">
           <thead>
-            <tr class="bg-paper-deep text-left text-xs uppercase tracking-wider text-muted">
-              <th class="px-4 py-3 font-semibold">Position</th>
-              <th class="px-4 py-3 font-semibold">Dir.</th>
-              <th class="px-4 py-3 font-semibold">Sector</th>
-              <th class="px-4 py-3 font-semibold">Entry</th>
-              <th class="px-4 py-3 text-right font-semibold">Entry px</th>
-              <th class="px-4 py-3 text-right font-semibold">Current</th>
-              <th class="px-4 py-3 text-right font-semibold">Return</th>
-              <th class="px-4 py-3 text-right font-semibold">Weight</th>
-              <th class="px-4 py-3 font-semibold">Report</th>
+            <tr class="text-left">
+              <th class="label-caps border-b border-ink px-3 py-3 first:pl-0">Position</th>
+              <th class="label-caps border-b border-ink px-3 py-3">Dir.</th>
+              <th class="label-caps border-b border-ink px-3 py-3">Sector</th>
+              <th class="label-caps border-b border-ink px-3 py-3">Entry</th>
+              <th class="label-caps border-b border-ink px-3 py-3 text-right">Entry px</th>
+              <th class="label-caps border-b border-ink px-3 py-3 text-right">Current</th>
+              <th class="label-caps border-b border-ink px-3 py-3 text-right">Return</th>
+              <th class="label-caps border-b border-ink px-3 py-3 text-right">Weight</th>
+              <th class="label-caps border-b border-ink px-3 py-3 last:pr-0">Report</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="font-sans">
             {
               pf.positions.length === 0 && (
-                <tr class="border-t border-line">
-                  <td colspan="9" class="px-4 py-10 text-center text-muted">
-                    No positions yet. Add your first one in <code>src/data/portfolio.json</code> once
+                <tr class="border-b border-line">
+                  <td colspan="9" class="px-3 py-10 text-center text-muted">
+                    No positions yet. Add your first one in <code class="figure text-xs">src/data/portfolio.json</code> once
                     you publish a report.
                   </td>
                 </tr>
@@ -111,26 +104,26 @@ const stats = [
             }
             {
               pf.positions.map((p) => (
-                <tr class="border-t border-line transition-colors hover:bg-paper-deep/60">
-                  <td class="px-4 py-3">
-                    <span class="font-semibold text-ink">{p.ticker}</span>
+                <tr class="border-b border-line">
+                  <td class="px-3 py-3 first:pl-0">
+                    <span class="figure font-semibold text-ink">{p.ticker}</span>
                     <span class="block text-xs text-muted">{p.company}</span>
                   </td>
-                  <td class:list={['px-4 py-3 font-medium', p.direction === 'Long' ? 'text-long' : 'text-short']}>
+                  <td class:list={['px-3 py-3 font-medium', p.direction === 'Long' ? 'text-long' : 'text-short']}>
                     {p.direction}
                   </td>
-                  <td class="px-4 py-3 text-muted">{p.sector}</td>
-                  <td class="px-4 py-3 text-muted">{formatDate(new Date(p.entryDate))}</td>
-                  <td class="px-4 py-3 text-right tabular-nums">{formatPrice(p.entryPrice)}</td>
-                  <td class="px-4 py-3 text-right tabular-nums">{formatPrice(p.currentPrice)}</td>
-                  <td class:list={['px-4 py-3 text-right font-semibold tabular-nums', p.returnPct >= 0 ? 'text-long' : 'text-short']}>
+                  <td class="px-3 py-3 text-muted">{p.sector}</td>
+                  <td class="figure px-3 py-3 text-xs text-muted">{formatDate(new Date(p.entryDate))}</td>
+                  <td class="figure px-3 py-3 text-right">{formatPrice(p.entryPrice)}</td>
+                  <td class="figure px-3 py-3 text-right">{formatPrice(p.currentPrice)}</td>
+                  <td class:list={['figure px-3 py-3 text-right font-medium', p.returnPct >= 0 ? 'text-long' : 'text-short']}>
                     {pct(p.returnPct)}
                   </td>
-                  <td class="px-4 py-3 text-right tabular-nums text-muted">{(p.weight * 100).toFixed(1)}%</td>
-                  <td class="px-4 py-3">
+                  <td class="figure px-3 py-3 text-right text-muted">{(p.weight * 100).toFixed(1)}%</td>
+                  <td class="px-3 py-3 last:pr-0">
                     {p.reportSlug ? (
-                      <a href={`/research/${p.reportSlug}`} class="font-medium text-accent hover:underline">
-                        View →
+                      <a href={`/research/${p.reportSlug}`} class="link font-medium">
+                        View
                       </a>
                     ) : (
                       <span class="text-muted">—</span>
@@ -142,7 +135,7 @@ const stats = [
           </tbody>
         </table>
       </div>
-      <p class="mt-3 text-xs text-muted">
+      <p class="mt-3 font-sans text-xs text-muted">
         Closed and losing positions stay on the record — nothing is deleted. Weights are share of the
         $100MM paper book.
       </p>

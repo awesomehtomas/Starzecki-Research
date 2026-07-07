@@ -6,28 +6,33 @@ const isActive = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(href + '/') || path === href;
 ---
 
-<header class="border-b border-line bg-paper/90 backdrop-blur sticky top-0 z-50">
+<header class="sticky top-0 z-50 bg-paper">
   <div class="mx-auto max-w-6xl px-5">
-    <div class="flex h-16 items-center justify-between">
+    <div class="flex h-16 items-center justify-between md:h-[4.5rem]">
       <!-- Wordmark -->
-      <a href="/" class="flex items-center gap-3 group" aria-label={site.name + ' home'}>
+      <a href="/" class="flex items-center gap-3" aria-label={site.name + ' home'}>
         <span
-          class="grid h-9 w-9 place-items-center rounded-sm bg-ink text-paper font-serif text-sm font-semibold tracking-tight"
+          class="grid h-9 w-9 place-items-center bg-accent font-serif text-base font-semibold text-paper"
           aria-hidden="true">SR</span>
-        <span class="font-serif text-lg font-semibold tracking-tight text-ink">
-          Starzecki <span class="text-accent">Research</span>
+        <span class="flex flex-col">
+          <span class="font-serif text-xl font-semibold leading-none tracking-tight text-ink">
+            Starzecki Research
+          </span>
+          <span class="label-caps mt-1.5 hidden leading-none sm:block">Independent equity research</span>
         </span>
       </a>
 
       <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center gap-7" aria-label="Primary">
+      <nav class="hidden items-center gap-7 md:flex" aria-label="Primary">
         {
           site.nav.map((item) => (
             <a
               href={item.href}
               class:list={[
-                'text-sm font-medium transition-colors hover:text-accent',
-                isActive(item.href) ? 'text-accent' : 'text-ink-soft',
+                'font-sans text-sm transition-colors',
+                isActive(item.href)
+                  ? 'font-semibold text-ink underline decoration-accent decoration-2 underline-offset-8'
+                  : 'font-medium text-ink-soft hover:text-accent',
               ]}
               aria-current={isActive(item.href) ? 'page' : undefined}
             >
@@ -40,7 +45,7 @@ const isActive = (href: string) =>
       <!-- Mobile toggle -->
       <button
         id="nav-toggle"
-        class="md:hidden inline-flex items-center justify-center rounded-sm p-2 text-ink"
+        class="inline-flex items-center justify-center p-2 text-ink md:hidden"
         aria-label="Toggle menu"
         aria-expanded="false"
         aria-controls="mobile-nav"
@@ -56,18 +61,18 @@ const isActive = (href: string) =>
     <!-- Mobile nav -->
     <nav
       id="mobile-nav"
-      class="md:hidden hidden pb-4"
+      class="hidden border-t border-line pb-4 md:hidden"
       aria-label="Primary mobile"
     >
-      <ul class="flex flex-col gap-1">
+      <ul class="flex flex-col">
         {
           site.nav.map((item) => (
-            <li>
+            <li class="border-b border-line">
               <a
                 href={item.href}
                 class:list={[
-                  'block rounded-sm px-3 py-2 text-sm font-medium',
-                  isActive(item.href) ? 'bg-paper-deep text-accent' : 'text-ink-soft',
+                  'block px-1 py-3 font-sans text-sm',
+                  isActive(item.href) ? 'font-semibold text-accent' : 'font-medium text-ink-soft',
                 ]}
                 aria-current={isActive(item.href) ? 'page' : undefined}
               >
@@ -79,6 +84,9 @@ const isActive = (href: string) =>
       </ul>
     </nav>
   </div>
+
+  <!-- Masthead double rule -->
+  <div class="rule-double" aria-hidden="true"></div>
 </header>
 
 <script>

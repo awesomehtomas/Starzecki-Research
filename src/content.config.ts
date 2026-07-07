@@ -28,6 +28,9 @@ const reports = defineCollection({
     pdf: z.string(), // path under /public, e.g. "/reports/vitl-2026-06.pdf"
     modelUrl: z.string().url().optional(), // Google Sheets link for the model
     tags: z.array(z.string()).optional(),
+    // Optional valuation anchors, shown in the report tearsheet when present.
+    evEbitda: z.number().optional(), // EV/EBITDA multiple, e.g. 8.5 → displayed "8.5×"
+    fcfYield: z.number().optional(), // FCF yield in percent, e.g. 5.2 → displayed "5.2%"
   }),
 });
 
