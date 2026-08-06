@@ -18,15 +18,6 @@ export function formatPrice(n: number): string {
   }).format(n);
 }
 
-// Whole-dollar currency (no cents) — for large figures like NAV.
-export function formatPriceWhole(n: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(n);
-}
-
 // Signed percentage, e.g. 0.234 -> "+23.4%".
 export function pct(n: number, digits = 1): string {
   return (n >= 0 ? '+' : '') + (n * 100).toFixed(digits) + '%';
