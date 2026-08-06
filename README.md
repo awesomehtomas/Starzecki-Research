@@ -1,7 +1,7 @@
 # Starzecki Research
 
-An independent, educational equity-research website with a transparent paper long/short
-portfolio. Built to be fast, clean, and almost entirely automatic — your only ongoing job is to
+An independent, educational equity-research website for publishing in-depth reports and the
+models behind them. Built to be fast, clean, and almost entirely automatic — your only ongoing job is to
 **write a report → export it to PDF → publish the model to Google Sheets → add one short entry → it's
 live.**
 
@@ -15,8 +15,8 @@ can break your computer.
 - **Research** — every report is a PDF you upload, shown on its own page with title/ticker/rating
   metadata, an embedded PDF viewer, a download button, and an "Open the model (Google Sheets) →"
   button.
-- **Portfolio** — a paper $100MM long/short book with positions and performance, benchmarked
-  against the S&P 500, fed from a simple data file (and optionally a linked live Google Sheet).
+- **Models** — every report links its full financial model (a read-only Google Sheet), so the
+  numbers behind the call are open to inspect.
 - **About, Methodology, Disclaimer** — the story, the house format, and the not-advice framing.
 - **Automatic everything else** — the homepage, the research index, sorting/filtering, the RSS feed,
   the sitemap, and social-share previews are all generated for you. The site rebuilds and redeploys
@@ -47,12 +47,11 @@ starzecki-research/
 ├─ src/
 │  ├─ content/reports/      ← ONE SMALL TEXT FILE PER REPORT
 │  ├─ data/
-│  │  ├─ site.ts            Your name, email, LinkedIn, nav, live-tracker link
-│  │  └─ portfolio.json     ← YOUR POSITIONS + NAV-vs-S&P HISTORY
-│  ├─ components/           Reusable building blocks (header, footer, cards, chart…)
+│  │  └─ site.ts            Your name, email, LinkedIn, nav links
+│  ├─ components/           Reusable building blocks (header, footer, tearsheet, rows…)
 │  ├─ layouts/              The page frame (head tags + header + footer)
-│  ├─ pages/                One file = one URL (home, research, portfolio, about…)
-│  ├─ lib/                  Small helpers (formatting, portfolio math)
+│  ├─ pages/                One file = one URL (home, research, about…)
+│  ├─ lib/                  Small helpers (formatting)
 │  ├─ styles/global.css     ← ALL COLORS AND FONTS (change them in one place)
 │  └─ content.config.ts     The list of fields every report must have
 ├─ scripts/
@@ -64,8 +63,8 @@ starzecki-research/
 └─ PUBLISHING.md            The plain-English "how to publish" guide
 ```
 
-The three places you'll ever touch: **`public/reports/`**, **`src/content/reports/`**, and
-**`src/data/portfolio.json`**. Plus **`src/data/site.ts`** once, to put in your real links.
+The two places you'll ever touch: **`public/reports/`** and **`src/content/reports/`**. Plus
+**`src/data/site.ts`** once, to put in your real links.
 
 ---
 
@@ -95,9 +94,7 @@ itself as you save files. To stop it, run `npm run astro -- dev stop` (or just c
 | I want to change…                         | Edit this file                          |
 | ----------------------------------------- | --------------------------------------- |
 | Your name, email, LinkedIn, nav links     | `src/data/site.ts`                      |
-| The live Google Sheet tracker button      | `src/data/site.ts` → `portfolioSheetUrl`|
 | Colors and fonts                          | `src/styles/global.css` (the `@theme`)  |
-| Portfolio positions & NAV history         | `src/data/portfolio.json`               |
 | The About page text / timeline            | `src/pages/about.astro`                 |
 | The Methodology or Disclaimer wording     | `src/pages/methodology.astro` / `disclaimer.astro` |
 | The live site URL (for SEO/RSS)           | `astro.config.mjs` → `site`             |
@@ -171,6 +168,6 @@ file-based flow above already does everything. Setup notes are in
 
 ## Honest-framing (it's part of the brand)
 
-Every page carries an "Educational / paper portfolio / not investment advice" line, every report
-shows its publication date and price at publication, the portfolio is benchmarked against the S&P
-500, and **losing positions stay published**. Please keep these — they're the point.
+Every page carries an "Educational / not investment advice" line, every report shows its
+publication date and price at publication, and **losing calls stay published** (nothing gets
+quietly deleted). Please keep these — they're the point.

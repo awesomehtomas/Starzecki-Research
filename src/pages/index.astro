@@ -4,9 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ReportRow from '../components/ReportRow.astro';
 import RatingBadge from '../components/RatingBadge.astro';
 import StatBlock from '../components/StatBlock.astro';
-import NavChart from '../components/NavChart.astro';
 import Disclaimer from '../components/Disclaimer.astro';
-import { getPortfolio } from '../lib/portfolio';
 import { site } from '../data/site';
 import { pct, formatDate, formatPrice, impliedMove } from '../lib/format';
 
@@ -15,7 +13,6 @@ const reports = (await getCollection('reports')).sort(
 );
 const featured = reports[0] ?? null;
 const rest = reports.slice(1, 4);
-const pf = getPortfolio();
 const fMove = featured ? impliedMove(featured.data.priceAtPublication, featured.data.priceTarget) : 0;
 
 const pillars = [
@@ -26,16 +23,16 @@ const pillars = [
     body: 'In-depth long/short reports, each following the same 12-section format.',
   },
   {
-    label: 'Portfolio',
-    href: '/portfolio',
-    linkText: 'View the book',
-    body: 'A hypothetical paper book, marked to market and benchmarked against the S&P 500.',
+    label: 'Models',
+    href: '/research',
+    linkText: 'Open a report',
+    body: 'Every report links its full financial model — the three-statement build, DCF, and comps behind the call.',
   },
   {
     label: 'Methodology',
     href: '/methodology',
     linkText: 'How it works',
-    body: 'How the work is produced — and why losing calls stay published.',
+    body: 'How the work is produced — and why calls that go wrong stay published.',
   },
 ];
 ---
@@ -50,13 +47,13 @@ const pillars = [
           Analysis in the open.
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-          Starzecki Research publishes in-depth long/short equity research — every call timestamped at
-          publication, benchmarked against the S&amp;P 500, and left on the record whether it works or
+          Starzecki Research publishes in-depth long/short equity research — every report timestamped
+          at publication, backed by a full model, and left on the record whether the call works or
           not.
         </p>
         <div class="mt-9 flex flex-wrap items-center gap-4">
           <a href="/research" class="btn btn-primary">Read the research</a>
-          <a href="/portfolio" class="btn btn-outline">The paper portfolio</a>
+          <a href="/methodology" class="btn btn-outline">How it works</a>
         </div>
       </div>
 
@@ -64,15 +61,13 @@ const pillars = [
         <StatBlock
           rows={[
             { label: 'Reports published', value: String(reports.length) },
-            { label: 'Paper NAV', value: pct(pf.navReturn) },
             {
-              label: 'vs S&P 500',
-              value: pct(pf.excess),
-              color: pf.excess >= 0 ? 'text-long' : 'text-short',
+              label: 'Latest report',
+              value: featured ? formatDate(new Date(featured.data.publishDate)) : '—',
             },
-            { label: 'Inception', value: formatDate(new Date(pf.inceptionDate)) },
+            { label: 'House format', value: '12-section' },
           ]}
-          note="Hypothetical paper book. Price-only, no real capital."
+          note="Every call is timestamped at publication and left on the record."
         >
         </StatBlock>
       </aside>
@@ -122,7 +117,7 @@ const pillars = [
               company={featured.data.company}
               rating={featured.data.rating}
               rows={[
-                { label: 'Entry', value: formatPrice(featured.data.priceAtPublication) },
+                { label: 'At publication', value: formatPrice(featured.data.priceAtPublication) },
                 { label: 'Target', value: formatPrice(featured.data.priceTarget) },
                 {
                   label: 'Implied upside',
@@ -177,46 +172,6 @@ const pillars = [
       </section>
     )
   }
-
-  <!-- Portfolio snapshot -->
-  <section class="border-t border-line">
-    <div class="mx-auto max-w-6xl px-5 py-14">
-      <div class="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
-        <div>
-          <p class="label-caps">The paper portfolio</p>
-          <h2 class="mt-3 font-serif text-2xl text-ink md:text-3xl">
-            Marked to market, benchmarked, on the record.
-          </h2>
-          <p class="mt-4 max-w-md leading-relaxed text-ink-soft">
-            A hypothetical $100MM long/short book tracked against the S&amp;P 500 since inception.
-            Price-only, no real capital — the point is to judge the reasoning over time.
-          </p>
-          <dl class="mt-7 grid grid-cols-3 gap-6 border-t border-ink pt-4">
-            <div>
-              <dt class="label-caps">Paper NAV</dt>
-              <dd class="figure mt-1.5 text-xl font-medium text-ink">{pct(pf.navReturn)}</dd>
-            </div>
-            <div>
-              <dt class="label-caps">S&amp;P 500</dt>
-              <dd class="figure mt-1.5 text-xl font-medium text-ink">{pct(pf.spxReturn)}</dd>
-            </div>
-            <div>
-              <dt class="label-caps">Excess</dt>
-              <dd class:list={['figure mt-1.5 text-xl font-medium', pf.excess >= 0 ? 'text-long' : 'text-short']}>
-                {pct(pf.excess)}
-              </dd>
-            </div>
-          </dl>
-          <a href="/portfolio" class="link mt-7 inline-block font-sans text-sm font-medium">
-            Full portfolio &amp; positions
-          </a>
-        </div>
-        <div class="border border-ink bg-card p-5">
-          <NavChart history={pf.history} />
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Disclaimer -->
   <section class="mx-auto max-w-6xl px-5 py-10">

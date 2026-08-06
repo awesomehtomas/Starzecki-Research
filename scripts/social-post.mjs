@@ -100,7 +100,7 @@ const linkedin = `${liOpen}
 
 A ${d.rating} ${verb} on ${d.company} (${d.ticker}): ${d.summary}
 
-It's published on Starzecki Research — an independent platform where I do equity research in the open: in-depth long/short work, a paper portfolio benchmarked against the S&P 500, and every call timestamped and left on the record whether it works or not.
+It's published on Starzecki Research — an independent platform where I do equity research in the open: in-depth long/short reports, each with its full financial model, timestamped and left on the record whether the call works or not.
 
 A résumé can show you what I've done. It can't show you how I think. This is where I show it.
 

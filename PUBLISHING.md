@@ -12,8 +12,7 @@ all produce the same result.
 
 ## Before your first publish (one-time)
 
-Open `src/data/site.ts` and replace the placeholders with your real **LinkedIn URL** and (optionally)
-your **Google Sheet portfolio tracker** link. Save. That's it.
+Open `src/data/site.ts` and replace the placeholder with your real **LinkedIn URL**. Save. That's it.
 
 ---
 
@@ -113,19 +112,15 @@ else to do.
 
 ---
 
-## Updating the portfolio
+## Linking a report's model
 
-Open `src/data/portfolio.json`.
+Each report can link its full financial model. In the report's markdown file, set:
 
-- **Update prices:** change each position's `currentPrice`. Returns recalculate automatically.
-- **Add a position:** copy an existing `{ … }` block inside `"positions"`, edit the values, and set
-  `reportSlug` to the report's file name (without `.md`) so it links back.
-- **Move the NAV line:** add a new `{ "date": "YYYY-MM-DD", "nav": 104.9, "spx": 103.2 }` entry to the
-  end of `"navHistory"`. Both numbers are indexed to 100 at inception.
-- **Close a losing/winning position — but keep it visible:** set its `"status": "Closed"`. **Do not
-  delete it.** Leaving losers up is the whole point.
+- **`modelUrl`** to the model's shareable link — e.g. a **read-only Google Sheet**
+  (`https://docs.google.com/spreadsheets/…`).
 
-Save and push. The portfolio page, chart, and homepage stats update themselves.
+The report page then shows an "Open the model (Google Sheets)" button. Set the sheet's sharing to
+**"Anyone with the link — Viewer"** so readers can open it. Omit `modelUrl` for a report with no model.
 
 ---
 

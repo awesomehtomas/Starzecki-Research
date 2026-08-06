@@ -14,14 +14,14 @@ const houseFormat = [
   ['Financial Model Summary', 'Key drivers and outputs from the underlying three-statement model.'],
   ['Sensitivity & Scenario Analysis', 'How the target moves under bear / base / bull assumptions.'],
   ['Risks, Mitigants & Disconfirmers', 'The threats to the thesis, their mitigants, and the disconfirming evidence I’m watching for.'],
-  ['Position & Sizing', 'How the idea translates into a position in the paper book, and why that size.'],
+  ['Position & Sizing', 'How the idea would be sized and expressed, and why, given conviction and risk.'],
   ['Appendix & Sources', 'Primary filings, data, and the trail behind the numbers.'],
 ];
 ---
 
 <BaseLayout
   title="Methodology"
-  description="How Starzecki Research works — the 12-section report format, the paper portfolio, S&P 500 benchmarking, position sizing, and why losing calls stay published."
+  description="How Starzecki Research works — the 12-section report format, the financial model behind every call, and why calls that go wrong stay published."
 >
   <section class="mx-auto max-w-3xl px-5 py-12">
     <PageHeader
@@ -50,44 +50,27 @@ const houseFormat = [
       }
     </ol>
 
-    <!-- Paper portfolio -->
-    <h2 class="mt-12 font-serif text-2xl text-ink">The paper portfolio</h2>
+    <!-- The model -->
+    <h2 class="mt-12 font-serif text-2xl text-ink">The model behind every report</h2>
     <div class="mt-3 space-y-4 leading-relaxed text-ink-soft">
       <p>
-        Ideas become positions in a hypothetical <strong class="text-ink">$100MM</strong> long/short
-        book. It is <strong class="text-ink">paper</strong> — no real capital is deployed — and
-        <strong class="text-ink"> price-only</strong>, marked to market without dividends, financing,
-        or borrow costs. The goal is a clean, honest read on whether the calls add value.
+        Every report is built on a full working model, and each one links straight to it — a
+        <strong class="text-ink">three-statement build</strong> feeding a
+        <strong class="text-ink">DCF</strong>, cross-checked against comparable companies and
+        precedent transactions. Nothing in the write-up is asserted that the model can’t support.
       </p>
       <p>
-        Each position is entered at the price on the publication date, so the entry can’t be
-        cherry-picked after the fact. Positions stay marked until they’re explicitly closed, and the
-        entry and closing prices are part of the permanent record.
+        The models are shared openly as read-only Google Sheets, so the assumptions, drivers, and
+        math are all inspectable — you can see exactly where a price target comes from.
       </p>
     </div>
-
-    <!-- Benchmarking -->
-    <h2 class="mt-12 font-serif text-2xl text-ink">Benchmarking vs the S&amp;P 500</h2>
-    <p class="mt-3 leading-relaxed text-ink-soft">
-      Net asset value is indexed to 100 at inception and tracked against the S&amp;P 500 over the same
-      window. The number that matters is <strong class="text-ink">excess return</strong> — NAV minus
-      the benchmark. Beating the market is the bar; matching it with more risk is not a win.
-    </p>
-
-    <!-- Sizing -->
-    <h2 class="mt-12 font-serif text-2xl text-ink">Position sizing</h2>
-    <p class="mt-3 leading-relaxed text-ink-soft">
-      Size follows conviction and risk, not enthusiasm. Higher-conviction ideas with clearer
-      catalysts and more downside protection get more weight; speculative or thinner-edge ideas are
-      kept small. Every report states its size and the reasoning behind it.
-    </p>
 
     <!-- Losers stay -->
     <h2 class="mt-12 font-serif text-2xl text-ink">Losers stay published</h2>
     <p class="mt-3 leading-relaxed text-ink-soft">
-      Nothing is deleted. Calls that go wrong remain on the site with their original timestamp and
-      price, and closed positions stay in the record. A track record only means something if it
-      includes the misses — so this one does, on purpose.
+      Nothing is deleted. Calls that go wrong stay on the site with their original timestamp, price,
+      and target. A track record only means something if it includes the misses — so this one does,
+      on purpose.
     </p>
 
     <div class="mt-12">
