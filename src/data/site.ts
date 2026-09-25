@@ -7,7 +7,7 @@ export const site = {
   shortName: 'Starzecki Research',
   tagline: 'Independent equity research.',
   description:
-    'In-depth long/short equity research and models, in the open. Every call is timestamped at publication and left on the record — win or lose. Not investment advice.',
+    'In-depth equity research, in the open. Every call is timestamped at publication and left on the record — win or lose. Not investment advice.',
   author: 'Thomas Starzecki',
   email: 'thomasstarzeckihof@gmail.com',
 

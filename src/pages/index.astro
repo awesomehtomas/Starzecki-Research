@@ -20,7 +20,7 @@ const pillars = [
     label: 'Research',
     href: '/research',
     linkText: 'Browse reports',
-    body: 'In-depth long/short reports, each following the same 12-section format.',
+    body: 'In-depth equity research reports, each following the same 12-section format.',
   },
   {
     label: 'Models',
@@ -47,7 +47,7 @@ const pillars = [
           Analysis in the open.
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-          Starzecki Research publishes in-depth long/short equity research — every report timestamped
+          Starzecki Research publishes in-depth equity research — every report timestamped
           at publication, backed by a full model, and left on the record whether the call works or
           not.
         </p>
@@ -103,7 +103,7 @@ const pillars = [
             </p>
             <div class="mt-4 flex items-center gap-2.5">
               <RatingBadge rating={featured.data.rating} />
-              <span class="font-sans text-sm text-muted">{featured.data.conviction} conviction</span>
+              {featured.data.conviction && <span class="font-sans text-sm text-muted">{featured.data.conviction} conviction</span>}
             </div>
             <p class="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">{featured.data.summary}</p>
             <a href={`/research/${featured.id}`} class="link mt-6 inline-block font-sans text-sm font-medium">

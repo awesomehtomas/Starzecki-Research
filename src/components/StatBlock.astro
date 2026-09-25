@@ -14,7 +14,7 @@ interface Row {
 interface Props {
   ticker?: string;
   company?: string;
-  rating?: 'Long' | 'Short' | 'Hold';
+  rating?: 'Buy' | 'Neutral' | 'Sell';
   rows: Row[];
   note?: string;
 }

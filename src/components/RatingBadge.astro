@@ -1,6 +1,6 @@
 ---
 interface Props {
-  rating: 'Long' | 'Short' | 'Hold';
+  rating: 'Buy' | 'Neutral' | 'Sell';
   size?: 'sm' | 'md';
 }
 const { rating, size = 'md' } = Astro.props;
@@ -8,9 +8,9 @@ const { rating, size = 'md' } = Astro.props;
 // Square-cornered "stamp" in the rating's own semantic color (see DESIGN.md).
 // Full literal class strings so Tailwind's scanner includes them in the build.
 const styles: Record<Props['rating'], string> = {
-  Long: 'text-long',
-  Short: 'text-short',
-  Hold: 'text-hold',
+  Buy: 'text-long',
+  Neutral: 'text-hold',
+  Sell: 'text-short',
 };
 const pad =
   size === 'sm'

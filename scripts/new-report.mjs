@@ -95,12 +95,11 @@ console.log('\n  New report  —  press Enter to accept the [default].\n');
 
 const ticker = (await ask('Ticker (e.g. VITL)')).toUpperCase();
 const company = await ask('Company name (e.g. Vital Farms)');
-const ratingShort = await askChoice('Rating', ['Long', 'Short', 'Hold'], 'Long');
+const ratingShort = await askChoice('Rating', ['Buy', 'Neutral', 'Sell'], 'Neutral');
 const titleDefault = `${company} (${ticker}) — ${ratingShort}`;
 const title = await ask('Title', titleDefault);
 const sector = await ask('Sector (e.g. Consumer Staples)');
 const publishDate = await ask('Publish date (YYYY-MM-DD)', today);
-const conviction = await askChoice('Conviction', ['Low', 'Medium', 'High'], 'Medium');
 const priceAtPublication = await askNumber('Price at publication', '0');
 const priceTarget = await askNumber('Price target', '0');
 const horizon = await ask('Horizon', '12–18 months');
@@ -132,7 +131,6 @@ const fm = [
   `sector: ${JSON.stringify(sector)}`,
   `publishDate: ${publishDate}`,
   `rating: ${JSON.stringify(ratingShort)}`,
-  `conviction: ${JSON.stringify(conviction)}`,
   `priceAtPublication: ${priceAtPublication}`,
   `priceTarget: ${priceTarget}`,
   `horizon: ${JSON.stringify(horizon)}`,

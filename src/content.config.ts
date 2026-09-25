@@ -18,8 +18,8 @@ const reports = defineCollection({
     company: z.string(),
     sector: z.string(), // used for the sector filter on /research
     publishDate: z.coerce.date(), // "2026-06-25" — locks the publication timestamp
-    rating: z.enum(['Long', 'Short', 'Hold']),
-    conviction: z.enum(['Low', 'Medium', 'High']),
+    rating: z.enum(['Buy', 'Neutral', 'Sell']),
+    conviction: z.enum(['Low', 'Medium', 'High']).optional(), // retired Aug 2026; kept optional
     priceAtPublication: z.number(),
     priceTarget: z.number(),
     horizon: z.string(), // e.g. "12–18 months"

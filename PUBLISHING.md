@@ -32,8 +32,8 @@ The text entry uses these fields (the "frontmatter"):
 | `company`            | `Vital Farms`                             |                                    |
 | `sector`             | `Consumer Staples`                        | Used by the sector filter          |
 | `publishDate`        | `2026-06-25`                              | Locks your timestamp — don't backdate |
-| `rating`             | `Long`, `Short`, or `Hold`                |                                    |
-| `conviction`         | `Low`, `Medium`, or `High`                |                                    |
+| `rating`             | `Buy`, `Neutral`, or `Sell`               |                                    |
+| `conviction`         | (retired — leave out)                     | Optional; no longer used           |
 | `priceAtPublication` | `38.50`                                   | The price the day you publish      |
 | `priceTarget`        | `50.00`                                   |                                    |
 | `horizon`            | `12–18 months`                            |                                    |

@@ -9,7 +9,7 @@ const reports = (await getCollection('reports')).sort(
   (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
 );
 const sectors = [...new Set(reports.map((r) => r.data.sector))].sort();
-const ratings = ['All', 'Long', 'Short', 'Hold'] as const;
+const ratings = ['All', 'Buy', 'Neutral', 'Sell'] as const;
 ---
 
 <BaseLayout
@@ -20,7 +20,7 @@ const ratings = ['All', 'Long', 'Short', 'Hold'] as const;
     <PageHeader
       eyebrow="Equity research"
       title="Research"
-      intro="In-depth long/short equity reports, each following the same 12-section format. Filter by sector or rating; everything is timestamped at publication."
+      intro="In-depth equity research reports, each following the same 12-section format. Filter by sector or rating; everything is timestamped at publication."
     />
 
     <!-- Filter toolbar -->

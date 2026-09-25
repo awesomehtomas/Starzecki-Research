@@ -40,8 +40,8 @@ const hasBody = (report.body ?? '').trim().length > 0;
 */
 const cells: { label: string; value?: string; color?: string; stamp?: boolean }[] = [
   { label: 'Rating', stamp: true },
-  { label: 'Conviction', value: d.conviction },
-  { label: 'Entry', value: formatPrice(d.priceAtPublication) },
+  ...(d.conviction ? [{ label: 'Conviction', value: d.conviction }] : []),
+  { label: 'Price at publication', value: formatPrice(d.priceAtPublication) },
   { label: 'Price target', value: formatPrice(d.priceTarget) },
   { label: 'Implied upside', value: pct(move), color: moveColor },
   { label: 'Horizon', value: d.horizon },
