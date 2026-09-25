@@ -10,7 +10,7 @@ const { variant = 'banner' } = Astro.props;
 {
   variant === 'banner' ? (
     <p class="border-y border-line py-3 font-sans text-xs leading-relaxed text-muted">
-      <span class="font-semibold text-ink">Educational use only.</span> {site.notAdvice}{' '}
+      {site.notAdvice}{' '}
       <a href="/disclaimer" class="link">
         Full disclaimer
       </a>
@@ -19,10 +19,10 @@ const { variant = 'banner' } = Astro.props;
   ) : (
     <div class="border-y border-line py-4 font-sans text-sm leading-relaxed text-muted">
       <p>
-        <span class="font-semibold text-ink">Not investment advice.</span> Starzecki Research is an
-        independent, educational project. Nothing here is a recommendation to buy or sell any
-        security. Prices, figures, and price targets may be delayed, approximate, or in error. Do
-        your own research and consult a licensed professional before investing.
+        <span class="font-semibold text-ink">{site.notAdvice}</span> Everything here is produced
+        for educational and demonstration purposes only. Nothing is a recommendation or solicitation
+        to buy or sell any security, and no real capital is managed. Prices, figures, and price
+        targets may be delayed, approximate, or in error.
       </p>
     </div>
   )

@@ -18,7 +18,7 @@ export const site = {
   twitterUrl: '',
 
   // The short "not advice" line shown across the site.
-  notAdvice: 'Educational equity research. Not investment advice.',
+  notAdvice: 'Educational / demonstration only. Not investment advice. Analysis only — no positions held or recommended.',
 
   // Main navigation (order matters).
   nav: [
